@@ -1,0 +1,220 @@
+{% extends 'layout.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block main %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>My Profile</h1>
+        <p>Manage your account information and preferences.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <div class="avatar-circle">
+                        <span class="avatar-initials">{{ current_user.firstname[0] }}{{ current_user.lastname[0] }}</span>
+                    </div>
+                    <h4 class="profile-name">{{ current_user.firstname }} {{ current_user.lastname }}</h4>
+                    <p class="profile-role">{{ current_user.role|title }}</p>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ get_cart_count(current_user.id) }}</span>
+                        <span class="stat-label">Items in Cart</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ get_user_orders(current_user.id)|length }}</span>
+                        <span class="stat-label">Total Orders</span>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <a href="{{ url_for('main.my_orders') }}" class="btn btn-outline-secondary w-100 mb-2">My Orders</a>
+                    <a href="{{ url_for('main.basket') }}" class="btn btn-outline-secondary w-100 mb-2">Shopping Cart</a>
+                    <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger w-100">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="profile-main">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="profile-tabs">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#personal-info">Personal Information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#account-settings">Account Settings</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="personal-info">
+                            <form method="POST" class="profile-form">
+                                {{ form.hidden_tag() }}
+                                
+                                <div class="form-section">
+                                    <h5 class="section-title">Basic Information</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                {{ form.firstname(class="form-control") }}
+                                                {{ form.firstname.label(class="form-label") }}
+                                                {% for error in form.firstname.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                {{ form.lastname(class="form-control") }}
+                                                {{ form.lastname.label(class="form-label") }}
+                                                {% for error in form.lastname.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h5 class="section-title">Contact Information</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                {{ form.email(class="form-control") }}
+                                                {{ form.email.label(class="form-label") }}
+                                                {% for error in form.email.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                {{ form.phone(class="form-control") }}
+                                                {{ form.phone.label(class="form-label") }}
+                                                {% for error in form.phone.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h5 class="section-title">Address Information</h5>
+                                    <div class="mb-3">
+                                        <div class="form-floating">
+                                            {{ form.address(class="form-control", rows="3", placeholder="Enter your address") }}
+                                            {{ form.address.label(class="form-label") }}
+                                            {% for error in form.address.errors %}
+                                                <div class="invalid-feedback">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="form-floating">
+                                                {{ form.city(class="form-control") }}
+                                                {{ form.city.label(class="form-label") }}
+                                                {% for error in form.city.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-floating">
+                                                {{ form.state(class="form-control") }}
+                                                {{ form.state.label(class="form-label") }}
+                                                {% for error in form.state.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-floating">
+                                                {{ form.zip(class="form-control") }}
+                                                {{ form.zip.label(class="form-label") }}
+                                                {% for error in form.zip.errors %}
+                                                    <div class="invalid-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <div class="form-floating">
+                                            {{ form.country(class="form-control") }}
+                                            {{ form.country.label(class="form-label") }}
+                                            {% for error in form.country.errors %}
+                                                <div class="invalid-feedback">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h5 class="section-title">About You</h5>
+                                    <div class="form-floating">
+                                        {{ form.bio(class="form-control", rows="4", placeholder="Tell us about yourself") }}
+                                        {{ form.bio.label(class="form-label") }}
+                                        {% for error in form.bio.errors %}
+                                            <div class="invalid-feedback">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    {{ form.submit(class="btn btn-action") }}
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="account-settings">
+                            <div class="settings-section">
+                                <h5 class="section-title">Account Information</h5>
+                                <div class="settings-grid">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h6>Account Type</h6>
+                                            <p>{{ current_user.role|title }}</p>
+                                        </div>
+                                        <div class="setting-value">
+                                            <span class="badge bg-primary">{{ current_user.role|title }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h6>Username</h6>
+                                            <p>{{ current_user.username }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h6>Member Since</h6>
+                                            <p>October 2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ artwork.title }}{% endblock %}
+
+{% block main %}
+<div class="dashboard-container">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="artwork-detail-image">
+                <img src="{{ url_for('static', filename=artwork.image_url) }}" class="img-fluid rounded" alt="{{ artwork.title }}">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="artwork-detail-info">
+                <h1 class="mb-3">{{ artwork.title }}</h1>
+                <p class="artist-name mb-3">by {{ artwork.artist_name }}</p>
+                <div class="artwork-price mb-4">${{ "%.2f"|format(artwork.price) }}</div>
+                
+                <h5 class="mt-4 mb-3">Description</h5>
+                <p class="mb-4">{{ artwork.description }}</p>
+                
+                <h5 class="mb-3">Details</h5>
+                <div class="artwork-specs mb-4">
+                    <div class="spec-item">
+                        <strong>Medium:</strong> {{ artwork.medium }}
+                    </div>
+                    <div class="spec-item">
+                        <strong>Dimensions:</strong> {{ artwork.dimensions }}
+                    </div>
+                    <div class="spec-item">
+                        <strong>Status:</strong> 
+                        <span class="badge bg-success">{{ artwork.status }}</span>
+                    </div>
+                </div>
+                
+                {% if current_user.is_authenticated %}
+                <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" class="mb-3">
+                    <button type="submit" class="btn btn-action w-100">Add to Cart</button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('main.login') }}" class="btn btn-action w-100 mb-3">Login to Add to Cart</a>
+                {% endif %}
+                
+                <a href="{{ url_for('main.artworks') }}" class="btn btn-outline-secondary w-100">Back to Artworks</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

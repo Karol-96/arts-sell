@@ -1,0 +1,132 @@
+{% extends 'layout.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block main %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Admin Control Panel</h1>
+        <p>Monitor platform activity and manage system operations.</p>
+    </div>
+    
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="stat-number">1,247</div>
+                <p>Registered platform users</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>Active Artists</h3>
+                <div class="stat-number">186</div>
+                <p>Content creators on platform</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>Total Artworks</h3>
+                <div class="stat-number">842</div>
+                <p>Listed artworks available</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>Revenue</h3>
+                <div class="stat-number">$48.2K</div>
+                <p>Platform revenue this month</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="table-container">
+                <h5 class="mb-3">Recent User Activity</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Smith</td>
+                            <td>Customer</td>
+                            <td>Purchased artwork</td>
+                            <td>Oct 12, 2025</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Emma Wilson</td>
+                            <td>Artist</td>
+                            <td>Uploaded new artwork</td>
+                            <td>Oct 12, 2025</td>
+                            <td><span class="badge bg-primary">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Michael Brown</td>
+                            <td>Customer</td>
+                            <td>Account created</td>
+                            <td>Oct 11, 2025</td>
+                            <td><span class="badge bg-info">New</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sarah Davis</td>
+                            <td>Artist</td>
+                            <td>Profile updated</td>
+                            <td>Oct 11, 2025</td>
+                            <td><span class="badge bg-primary">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>James Johnson</td>
+                            <td>Customer</td>
+                            <td>Purchased artwork</td>
+                            <td>Oct 10, 2025</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Lisa Anderson</td>
+                            <td>Artist</td>
+                            <td>Artwork approved</td>
+                            <td>Oct 10, 2025</td>
+                            <td><span class="badge bg-success">Approved</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="action-card">
+                <h5>User Management</h5>
+                <p>View and manage all registered users on the platform.</p>
+                <a href="#" class="btn btn-action w-100 mb-2">Manage Users</a>
+            </div>
+            
+            <div class="action-card">
+                <h5>Artwork Moderation</h5>
+                <p>Review and approve pending artwork submissions.</p>
+                <a href="#" class="btn btn-action w-100 mb-2">Review Artworks</a>
+            </div>
+            
+            <div class="action-card">
+                <h5>Platform Settings</h5>
+                <p>Configure system settings and platform preferences.</p>
+                <a href="#" class="btn btn-action w-100 mb-2">System Settings</a>
+            </div>
+            
+            <div class="action-card">
+                <h5>Financial Reports</h5>
+                <p>Access detailed financial analytics and reports.</p>
+                <a href="#" class="btn btn-action w-100 mb-2">View Reports</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
