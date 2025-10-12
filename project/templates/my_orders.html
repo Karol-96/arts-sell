@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block main %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>My Orders</h1>
+        <p>Track and manage your order history</p>
+    </div>
+
+    {% if orders %}
+    <div class="table-container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Payment Method</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.created_at.strftime('%b %d, %Y') }}</td>
+                    <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                    <td>
+                        {% if order.status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% elif order.status == 'processing' %}
+                            <span class="badge bg-info">Processing</span>
+                        {% elif order.status == 'shipped' %}
+                            <span class="badge bg-primary">Shipped</span>
+                        {% elif order.status == 'delivered' %}
+                            <span class="badge bg-success">Delivered</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ order.status|title }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ order.payment_method|replace('_', ' ')|title }}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-outline-secondary">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center" style="min-height: 50vh; display: flex; align-items: center; justify-content: center;">
+        <div>
+            <h3 class="text-muted mb-4">No orders yet</h3>
+            <p class="text-muted mb-4">Start shopping to see your order history here</p>
+            <a href="{{ url_for('main.artworks') }}" class="btn btn-action">Browse Artworks</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

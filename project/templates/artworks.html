@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block title %}Browse Artworks{% endblock %}
+
+{% block main %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Discover Unique Artworks</h1>
+        <p>Browse through our curated collection of original art pieces from talented artists worldwide.</p>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="search-bar">
+                <form class="d-flex" method="GET">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Search for artworks, artists, or styles" aria-label="Search">
+                    <button class="btn btn-action" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" style="border-radius: 8px; padding: 10px;">
+                <option selected>Sort by: Featured</option>
+                <option value="1">Price: Low to High</option>
+                <option value="2">Price: High to Low</option>
+                <option value="3">Newest First</option>
+                <option value="4">Most Popular</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="artwork-grid">
+        {% if artworks %}
+            {% for artwork in artworks %}
+            <div class="artwork-item">
+                <a href="{{ url_for('main.artwork_detail', artwork_id=artwork.id) }}" class="artwork-link">
+                    <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" alt="{{ artwork.title }}">
+                    <div class="artwork-info">
+                        <h5>{{ artwork.title }}</h5>
+                        <p>by {{ artwork.artist_name }}</p>
+                        <p>{{ artwork.medium }}, {{ artwork.dimensions }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="artwork-price">${{ "%.2f"|format(artwork.price) }}</span>
+                            <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" style="display: inline;" onclick="event.stopPropagation();">
+                                <button type="submit" class="btn btn-sm btn-action">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No artworks available at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-5">
+        <nav aria-label="Artwork pagination">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+

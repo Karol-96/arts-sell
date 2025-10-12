@@ -1,63 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'layout.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="description" content="My Travel App">
-    <title>Basket</title>
-</head>
-<body>
-    <header>
-        <h1>XYZ Travel</h1>
-    </header>
-    <nav>
-        <a href="#" class="brand_color_set" style="margin:10px;">About Us</a>
-        <a href="index.html" class="brand_color_set" style="margin:10px;">Cities</a>
-        <a href="basket.html" class="brand_color_set" style="margin:10px;">Basket</a>
-        <input type="search" placeholder="Look for more cities" style="float:right;">
-    </nav>
+{% block title %}Shopping Basket{% endblock %}
 
-    <main>
-        <h2>Shopping Basket</h2>
-        
-        <table border="1">
-            <tr>
-                <th>Tour name</th>
-                <th>Date</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
-            <tr>
-                <td>Brisbane - Ghost Tour</td>
-                <td>June 15 2025 @ 7pm</td>
-                <td>$15.00</td>
-                <td><button>Remove</button><button>Edit Item</button></td>
-            </tr>
-            <tr>
-                <td>Brisbane - Parliament Tour</td>
-                <td>June 15 2025 @ 2pm</td>
-                <td>$10.00</td>
-                <td><button>Remove</button><button>Edit Item</button></td>
-            </tr>
-            <tr>
-                <td>Mt Coot-tha Botanical Gardens Guided Tour</td>
-                <td>June 16 2025 @ 11am</td>
-                <td>$10.00</td>
-                <td><button>Remove</button><button>Edit Item</button></td>
-            </tr>
-            <tr>
-                <td><b>Total</b></td>
-                <td></td>
-                <td><b>$35.00</b></td>
-                <td></td>
-            </tr>
-        </table>
+{% block main %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Shopping Basket</h1>
+        <p>Review your selected artworks before proceeding to checkout.</p>
+    </div>
 
-        <div style="padding:5px; margin:5px;">
-        <button>Back</button>  <a href="checkout.html"><button>Checkout</button></a>
+    {% if items %}
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="table-container">
+                <h5 class="mb-4">Your Items</h5>
+                
+                {% for item in items %}
+                <div class="row mb-4 pb-3 border-bottom">
+                    <div class="col-md-3">
+                        <img src="{{ url_for('static', filename=item.image_url if item.image_url else 'img/feature-slide-1.png') }}" class="img-fluid rounded" alt="{{ item.title }}">
+                    </div>
+                    <div class="col-md-6">
+                        <h5>{{ item.title }}</h5>
+                        <p class="text-muted mb-1">by {{ item.artist_name }}</p>
+                        <p class="text-muted small">{{ item.medium }}, {{ item.dimensions }}</p>
+                        <form method="POST" action="{{ url_for('main.remove_cart', cart_id=item.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                        </form>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <h4 class="artwork-price">${{ "%.2f"|format(item.price) }}</h4>
+                        {% if item.quantity > 1 %}
+                        <small class="text-muted">Qty: {{ item.quantity }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('main.artworks') }}" class="btn btn-outline-secondary">Continue Shopping</a>
+                </div>
+            </div>
         </div>
 
-    </main>
+        <div class="col-lg-4">
+            <div class="action-card">
+                <h5 class="mb-4">Order Summary</h5>
+                
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Subtotal</span>
+                    <span>${{ "%.2f"|format(subtotal) }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Shipping</span>
+                    <span>${{ "%.2f"|format(shipping) }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Tax (8%)</span>
+                    <span>${{ "%.2f"|format(tax) }}</span>
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between mb-4">
+                    <strong>Total</strong>
+                    <strong class="artwork-price">${{ "%.2f"|format(total) }}</strong>
+                </div>
+                
+                <a href="{{ url_for('main.checkout') }}" class="btn btn-action w-100 mb-3">Proceed to Checkout</a>
+                
+                <div class="text-center text-muted small">
+                    <p class="mb-0">Secure checkout guaranteed</p>
+                </div>
+            </div>
 
-</body>
-</html>
+            <div class="action-card mt-3">
+                <h6 class="mb-3">Apply Discount Code</h6>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Enter code" style="border-radius: 8px 0 0 8px;">
+                    <button class="btn btn-outline-secondary" type="button" style="border-radius: 0 8px 8px 0;">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center py-5">
+            <div class="empty-basket">
+                <h3 class="text-muted mb-3">Your basket is empty</h3>
+                <p class="text-muted mb-4">Start shopping to add beautiful artworks to your cart</p>
+                <a href="{{ url_for('main.artworks') }}" class="btn btn-action">Browse Artworks</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

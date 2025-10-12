@@ -1,9 +1,100 @@
 {% extends 'layout.html' %}
  
-{% block title %}
-    Artist Dashboard
-{% endblock %}
+{% block title %}Artist Dashboard{% endblock %}
 
 {% block main %}
-    <h1>Welcome to the Artist Dashboard</h1>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Artist Portal</h1>
+        <p>Welcome back, {{ current_user.firstname }}! Manage your artworks and track your performance.</p>
+    </div>
+    
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h3>Total Artworks</h3>
+                <div class="stat-number">24</div>
+                <p>Active listings on the platform</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h3>Total Sales</h3>
+                <div class="stat-number">47</div>
+                <p>Artworks sold this month</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h3>Revenue</h3>
+                <div class="stat-number">$3,240</div>
+                <p>Earnings this month</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="action-card">
+                <h5>Upload New Artwork</h5>
+                <p>Add new artworks to your collection and reach more customers.</p>
+                <a href="#" class="btn btn-action">Upload Artwork</a>
+            </div>
+            
+            <div class="action-card">
+                <h5>Manage Inventory</h5>
+                <p>Edit, update, or remove existing artworks from your portfolio.</p>
+                <a href="#" class="btn btn-action">View All Artworks</a>
+            </div>
+            
+            <div class="action-card">
+                <h5>Sales History</h5>
+                <p>View detailed reports of your sales and customer interactions.</p>
+                <a href="#" class="btn btn-action">View Reports</a>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="table-container">
+                <h5 class="mb-3">Recent Activity</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Artwork</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Abstract Sunset</td>
+                            <td><span class="badge bg-success">Sold</span></td>
+                            <td>Oct 10, 2025</td>
+                        </tr>
+                        <tr>
+                            <td>Mountain View</td>
+                            <td><span class="badge bg-info">Viewed</span></td>
+                            <td>Oct 9, 2025</td>
+                        </tr>
+                        <tr>
+                            <td>Ocean Waves</td>
+                            <td><span class="badge bg-warning">In Cart</span></td>
+                            <td>Oct 8, 2025</td>
+                        </tr>
+                        <tr>
+                            <td>City Lights</td>
+                            <td><span class="badge bg-success">Sold</span></td>
+                            <td>Oct 7, 2025</td>
+                        </tr>
+                        <tr>
+                            <td>Forest Path</td>
+                            <td><span class="badge bg-primary">Active</span></td>
+                            <td>Oct 6, 2025</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

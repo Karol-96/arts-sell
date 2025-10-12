@@ -11,8 +11,8 @@ def create_app():
     app.debug = True
     app.secret_key = 'Admin123'
 
-    app.config['MYSQL_HOST'] = '' #replace with your mysql host
-    app.config['MYSQL_USER'] = '' #replace with your mysql user
+    app.config['MYSQL_HOST'] = 'localhost' #replace with your mysql host
+    app.config['MYSQL_USER'] = 'root' #replace with your mysql user
     app.config['MYSQL_PASSWORD'] = '' #replace with your mysql password
     app.config['MYSQL_DB'] = 'artspace' #create a database name artspace for consistency
     app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -40,5 +40,17 @@ def create_app():
 
     # Load session module
     from . import session
+    
+    # Context processor for templates
+    @app.context_processor
+    def inject_user():
+        from flask_login import current_user
+        from .db import get_cart_count, get_user_orders
+        cart_count = 0
+        user_orders = []
+        if current_user.is_authenticated:
+            cart_count = get_cart_count(current_user.id)
+            user_orders = get_user_orders(current_user.id)
+        return dict(current_user=current_user, get_cart_count=get_cart_count, get_user_orders=get_user_orders)
     
     return app
