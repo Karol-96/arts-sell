@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+    <!--Carousel-->
+    <div class="carousel slide" id="banner-head" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{{ url_for('static', filename='img/feature-slide-1.png') }}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h4>NEW THIS WEEK</h4>
+                    <p>Discover New Arts We Pick This Week</p>
+                    <a href="{{ url_for('main.index') }}">EXPLORE NOW</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='img/feature-slide-2.png') }}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h4>RECOMMENDATIONS</h4>
+                    <p>Work With Us to Find Your Perfect Artworks</p>
+                    <a href="{{ url_for('main.index') }}">GET STARTED</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='img/feature-slide-3.png') }}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h4>HAVE ARTWORKS FOR LEASE?</h4>
+                    <p>Join Us Now To Enjoy Our Perks For Creators</p>
+                    <a href="{{ url_for('main.register_artist') }}">JOIN AS ARTIST</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#banner-head" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#banner-head" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+{% endblock %}
+
+{% block main %}
+    <!--Feature Introduction-->
+    <div class="intro-container">
+        <h3 class="text-center py-3">Experience the Joy of Living with Original Art</h3>
+        <div class="row justify-content-center g-4">
+            {% for tile in tiles %}
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card border-0 bg-transparent">
+                        <a href="{{ tile.url }}" class="{{ tile.link_title }}">
+                            <img src="{{ url_for('static', filename=tile.img) }}" alt="{{ tile.title }}" class="img-fluid rounded">
+                        </a>
+                        <div class="mt-2">
+                            <h6 class="fw-semibold">{{ tile.title }}</h6>
+                            <a href="{{ tile.url }}" class="text-decoration-none text-dark small text-uppercase">
+                                {{ tile.link_title }}
+                            </a>
+                        </div>
+                    </div>                
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br><br>
+{% endblock %}

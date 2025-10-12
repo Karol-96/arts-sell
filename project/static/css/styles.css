@@ -1,0 +1,186 @@
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    min-width: 480px;
+}
+
+main {
+    flex-grow: 1;
+    margin: 2em;
+    padding: 1em;
+    /*background: lightblue;*/
+}
+
+/*NavBar*/
+.navbar {
+    padding-right: 2em;
+    padding-left: 2em;
+    background: rgb(237, 237, 237);
+}
+
+.brand-name {
+    font-family: sofia;
+}
+
+.nav-brand p {
+    font-size: 1.1em;
+}
+
+.navbar > .navbar-toggler {
+    border: none;
+}
+
+.navbar-collapse a {
+    text-decoration: none;
+    color: grey;
+    transition: color 0.5s ease, transform 0.5s ease;
+}
+
+.flash-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    min-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    animation: flashMessage 3s ease-in-out forwards;
+    pointer-events: none;
+}
+
+@keyframes flashMessage {
+    0% { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-20px); 
+    }
+    15% { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0); 
+    }
+    85% { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-20px);
+        visibility: hidden;
+    }
+}
+
+.flash-message.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.flash-message.alert-error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/*Carousel Banner-Head*/
+#banner-head .carousel-item:before {
+    content: "";
+    background-image: linear-gradient(
+        to bottom, transparent, rgba(0,0,0,0.2));
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+#banner-head .carousel-item img {
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    width: 100vh;
+    height: 50vh;
+}
+
+#banner-head .carousel-caption {
+    background: rgb(225,225,225);
+    color: black;
+    padding: 30px;
+    left: 0;
+    bottom: 0;
+    width: 400px;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+}
+
+#banner-head .carousel-control-prev, #banner-head .carousel-control-next {
+    top: auto;
+    width: auto;
+    margin: 20px;
+    padding: 5px;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 100%;
+}
+
+#banner-head .carousel-control-prev {
+    right: 8vh;
+    left: auto;
+}
+
+#banner-head .carousel-caption a {
+    color: rgb(102, 102, 102);
+    transition: color 0.5s ease, transform 0.5s ease;
+}
+
+#banner-head .carousel-caption a:hover {
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/*Feature Introduction*/
+
+.card img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/*Login*/
+
+.form-signin {
+    max-width: 330px;
+    text-align: center;
+    gap: 20px;
+    padding: 15px;
+    margin: 0px auto;
+}
+
+/*Footer*/
+footer {
+    background: rgb(237, 237, 237);
+    padding: 2em 2em 1em 2em;
+    position: relative;
+    bottom: 0;
+    left: 0;
+}
+
+.nav-item > a, .social > a {
+    text-decoration: none;
+    color: lightgrey;
+}
+
+.form-email {
+    padding: 0.2em;
+    background: white;
+}
+
+.form-email > input, button {
+    border: none;
+    background: none;
+}
