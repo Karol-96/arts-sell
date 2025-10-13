@@ -1,18 +1,18 @@
-<<<<<<< HEAD
-# Arts Sell - Art Marketplace Platform
+# ArtSpace - Art Lease Platform
 
-A modern web application for buying and selling artwork, built with Flask and featuring a beautiful, responsive frontend.
+A modern web application for leasing artwork through monthly subscriptions, built with Flask and featuring a beautiful, responsive frontend.
 
 ## 🌟 Features
 
 - **User Authentication**: Secure login/registration system with role-based access (Customer, Artist, Admin)
-- **Artwork Gallery**: Browse and search through available artworks
-- **Shopping Cart**: Add artworks to cart and manage quantities
-- **Checkout System**: Complete purchase flow with order management
-- **Artist Dashboard**: Artists can manage their portfolio and track sales
+- **Artwork Gallery**: Browse and search through available artworks for lease
+- **Lease Cart**: Add artworks to cart for monthly subscription
+- **Checkout System**: Complete lease subscription flow with order management
+- **Artist Dashboard**: Artists can manage their portfolio and track lease history
 - **Admin Dashboard**: Administrative controls for platform management
 - **Responsive Design**: Modern UI that works on all devices
 - **Profile Management**: Users can update their personal information
+- **Unique Artwork System**: Each artwork is unique (quantity = 1), when leased, others must wait for return
 
 ## 🎨 Frontend Improvements
 
@@ -78,18 +78,18 @@ A modern web application for buying and selling artwork, built with Flask and fe
 
 ## 📱 User Roles
 
-- **Customer**: Browse and purchase artworks
-- **Artist**: Upload and manage artworks, track sales
+- **Customer**: Browse and lease artworks through monthly subscriptions
+- **Artist**: Upload and manage artworks, track lease history
 - **Admin**: Manage users, artworks, and platform settings
 
 ## 🎯 Key Pages
 
 - **Home**: Featured artworks and platform introduction
-- **Artworks**: Browse all available artworks
-- **Profile**: Manage personal information and view order history
-- **Cart**: Shopping cart management
-- **Checkout**: Complete purchase process
-- **Artist Dashboard**: Portfolio and sales management
+- **Artworks**: Browse all available artworks for lease
+- **Profile**: Manage personal information and view lease history
+- **Cart**: Lease cart management
+- **Checkout**: Complete lease subscription process
+- **Artist Dashboard**: Portfolio and lease history management
 - **Admin Dashboard**: Platform administration
 
 ## 🔧 Development
@@ -114,6 +114,25 @@ project/
 
 This project is open source and available under the [MIT License](LICENSE).
 
+## 🖼️ Artwork Data Licensing
+
+**Important Notice**: This application uses artwork data for university demonstration purposes only.
+
+### Data Source and Usage
+- **Source**: Artwork data is crawled from open access galleries
+- **Purpose**: University demonstration and educational use only
+- **Commercial Use**: This data is NOT intended for commercial purposes
+- **Data Modifications**: Some metadata (including prices) has been modified to adapt to the assignment requirements
+
+### Attribution
+- **Primary Source**: [The Metropolitan Museum of Art Open Access](https://www.metmuseum.org/about-the-met/policies-and-documents/open-access)
+- **Credit**: We acknowledge and credit The Metropolitan Museum of Art for providing open access to their collection data
+
+### Legal Compliance
+- All artwork data is used in compliance with the source institution's open access policies
+- Users are responsible for ensuring compliance with any applicable licensing terms
+- For commercial use, users must obtain appropriate licenses from the original data sources
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -125,15 +144,3 @@ If you have any questions or need help, please open an issue on GitHub.
 ---
 
 **Made with ❤️ for art lovers and creators**
-=======
-To test the file and authentication flow:
-1. Set up environment, install required package from requirements.txt
-```python
-pip install -r requirements.txt
-```
-2. Initialize mysql server, create a database name 'artspace' and simply copy the CREATE TABLE users in the database.sql
-3. Update the mysql configurations in __init__.py, set the host, user and password to your setting
-4. Run python run.py
-5. Register for an account first before you can log in
-6. Currently, there's no explicit privileges for admin and artist yet as it depends on the other features.
->>>>>>> frontend-improvements
