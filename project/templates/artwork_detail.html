@@ -1,49 +1,382 @@
 {% extends 'layout.html' %}
 
-{% block title %}{{ artwork.title }}{% endblock %}
+{% block title %}{{ artwork.title }} - ArtSpace{% endblock %}
 
 {% block main %}
-<div class="dashboard-container">
-    <div class="row g-4">
-        <div class="col-lg-6">
-            <div class="artwork-detail-image">
-                <img src="{{ url_for('static', filename=artwork.image_url) }}" class="img-fluid rounded" alt="{{ artwork.title }}">
+<div class="artwork-detail-container">
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.artworks') }}">Artworks</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ artwork.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row g-5">
+            <!-- Artwork Image Section -->
+            <div class="col-lg-7">
+                <div class="artwork-image-section">
+                    <div class="main-image-container">
+                        <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
+                             class="main-artwork-image" alt="{{ artwork.title }}" id="mainImage">
+                        <div class="image-overlay">
+                            <button class="btn btn-overlay" onclick="openImageModal()">
+                                <i class="zoom-icon">🔍</i> Zoom
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Thumbnails (if multiple images) -->
+                    <div class="thumbnail-gallery">
+                        <div class="thumbnail-item active">
+                            <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
+                                 alt="{{ artwork.title }}" onclick="changeMainImage(this.src)">
+                        </div>
+                        <!-- Additional thumbnails can be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artwork Information Section -->
+            <div class="col-lg-5">
+                <div class="artwork-info-section">
+                    <!-- Header -->
+                    <div class="artwork-header">
+                        <h1 class="artwork-title">{{ artwork.title }}</h1>
+                        <p class="artist-name">by <a href="#" class="artist-link">{{ artwork.artist_name }}</a></p>
+                        <div class="artwork-rating">
+                            <div class="stars">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <span class="rating-text">(4.8/5) • 127 reviews</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing -->
+                    <div class="pricing-section">
+                        <div class="price-display">
+                            <span class="main-price">${{ "%.2f"|format(artwork.price) }}</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <div class="price-details">
+                            <small class="text-muted">Monthly lease • Free delivery & setup</small>
             </div>
         </div>
-        <div class="col-lg-6">
-            <div class="artwork-detail-info">
-                <h1 class="mb-3">{{ artwork.title }}</h1>
-                <p class="artist-name mb-3">by {{ artwork.artist_name }}</p>
-                <div class="artwork-price mb-4">${{ "%.2f"|format(artwork.price) }}</div>
-                
-                <h5 class="mt-4 mb-3">Description</h5>
-                <p class="mb-4">{{ artwork.description }}</p>
-                
-                <h5 class="mb-3">Details</h5>
-                <div class="artwork-specs mb-4">
-                    <div class="spec-item">
-                        <strong>Medium:</strong> {{ artwork.medium }}
+                    
+                    <!-- Availability Status -->
+                    <div class="availability-section">
+                        <div class="status-badge">
+                            <span class="badge bg-success">
+                                <i class="status-icon">✓</i> Available for Lease
+                            </span>
+                        </div>
+                        <div class="availability-info">
+                            <small class="text-muted">Ready for immediate delivery</small>
+                        </div>
                     </div>
-                    <div class="spec-item">
-                        <strong>Dimensions:</strong> {{ artwork.dimensions }}
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        {% if current_user.is_authenticated %}
+                            <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" class="add-to-cart-form">
+                                <button type="submit" class="btn btn-add-to-cart">
+                                    <i class="cart-icon">🛒</i> Add to Lease Cart
+                                </button>
+                            </form>
+                            <button class="btn btn-wishlist" onclick="addToWishlist({{ artwork.id }})">
+                                <i class="heart-icon">♡</i> Add to Wishlist
+                            </button>
+                        {% else %}
+                            <a href="{{ url_for('main.login') }}" class="btn btn-add-to-cart">
+                                <i class="cart-icon">🛒</i> Login to Add to Cart
+                            </a>
+                            <a href="{{ url_for('main.login') }}" class="btn btn-wishlist">
+                                <i class="heart-icon">♡</i> Login to Add to Wishlist
+                            </a>
+                        {% endif %}
                     </div>
-                    <div class="spec-item">
-                        <strong>Status:</strong> 
-                        <span class="badge bg-success">{{ artwork.status }}</span>
+                    
+                    <!-- Quick Info -->
+                    <div class="quick-info">
+                        <div class="info-item">
+                            <i class="info-icon">🚚</i>
+                            <span>Free delivery & setup</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="info-icon">🔄</i>
+                            <span>Easy monthly exchange</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="info-icon">🛡️</i>
+                            <span>Fully insured</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Information Tabs -->
+        <div class="artwork-details-section">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav nav-tabs detail-tabs" id="artworkTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
+                                Description
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="specifications-tab" data-bs-toggle="tab" data-bs-target="#specifications" type="button" role="tab">
+                                Specifications
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                                Reviews (127)
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">
+                                Delivery & Setup
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content detail-content" id="artworkTabContent">
+                        <!-- Description Tab -->
+                        <div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <div class="description-content">
+                                <h4>About This Artwork</h4>
+                                <p>{{ artwork.description or "This stunning artwork brings elegance and sophistication to any space. The piece showcases the artist's unique style and creative vision, making it a perfect addition to your collection." }}</p>
+                                
+                                <h5>Artist Statement</h5>
+                                <p>This piece represents a fusion of traditional techniques with contemporary expression, creating a timeless work that speaks to both the past and present.</p>
+                                
+                                <h5>Perfect For</h5>
+                                <ul class="perfect-for-list">
+                                    <li>Living rooms and common areas</li>
+                                    <li>Office spaces and lobbies</li>
+                                    <li>Bedrooms and private spaces</li>
+                                    <li>Restaurants and hospitality venues</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Specifications Tab -->
+                        <div class="tab-pane fade" id="specifications" role="tabpanel">
+                            <div class="specifications-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Physical Details</h5>
+                                        <table class="spec-table">
+                                            <tr>
+                                                <td><strong>Medium:</strong></td>
+                                                <td>{{ artwork.medium }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Dimensions:</strong></td>
+                                                <td>{{ artwork.dimensions }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Weight:</strong></td>
+                                                <td>Approx. 2.5 kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Frame:</strong></td>
+                                                <td>Professional museum-quality frame</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Lease Information</h5>
+                                        <table class="spec-table">
+                                            <tr>
+                                                <td><strong>Monthly Rate:</strong></td>
+                                                <td>${{ "%.2f"|format(artwork.price) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Minimum Lease:</strong></td>
+                                                <td>1 month</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Delivery:</strong></td>
+                                                <td>Free within 50km</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Insurance:</strong></td>
+                                                <td>Included</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Reviews Tab -->
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="reviews-content">
+                                <div class="reviews-summary">
+                                    <div class="rating-overview">
+                                        <div class="overall-rating">
+                                            <span class="rating-number">4.8</span>
+                                            <div class="stars-large">
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                            </div>
+                                            <p class="rating-count">Based on 127 reviews</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="reviews-list">
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <div class="reviewer-info">
+                                                <strong>Sarah M.</strong>
+                                                <div class="review-rating">
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                </div>
+                                            </div>
+                                            <span class="review-date">2 days ago</span>
+                                        </div>
+                                        <p class="review-text">"Absolutely stunning piece! The quality is exceptional and it transformed my living room. The delivery team was professional and the setup was seamless."</p>
+                                    </div>
+                                    
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <div class="reviewer-info">
+                                                <strong>Michael R.</strong>
+                                                <div class="review-rating">
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                    <span class="star">★</span>
+                                                </div>
+                                            </div>
+                                            <span class="review-date">1 week ago</span>
+                                        </div>
+                                        <p class="review-text">"Perfect for my office space. The monthly lease makes it easy to refresh my environment regularly. Highly recommend!"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Shipping Tab -->
+                        <div class="tab-pane fade" id="shipping" role="tabpanel">
+                            <div class="shipping-content">
+                                <h5>Delivery & Setup Process</h5>
+                                <div class="shipping-steps">
+                                    <div class="step-item">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h6>Schedule Delivery</h6>
+                                            <p>Choose your preferred delivery date and time slot</p>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h6>Professional Setup</h6>
+                                            <p>Our team will carefully install and position your artwork</p>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h6>Enjoy Your Art</h6>
+                                            <p>Relax and enjoy your new artwork in your space</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="shipping-info">
+                                    <h6>Delivery Information</h6>
+                                    <ul>
+                                        <li>Free delivery within 50km of city center</li>
+                                        <li>Professional installation included</li>
+                                        <li>Fully insured during transport</li>
+                                        <li>Available 7 days a week</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     </div>
                 </div>
                 
-                {% if current_user.is_authenticated %}
-                <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" class="mb-3">
-                    <button type="submit" class="btn btn-action w-100">Add to Cart</button>
-                </form>
-                {% else %}
-                <a href="{{ url_for('main.login') }}" class="btn btn-action w-100 mb-3">Login to Add to Cart</a>
-                {% endif %}
-                
-                <a href="{{ url_for('main.artworks') }}" class="btn btn-outline-secondary w-100">Back to Artworks</a>
+        <!-- Related Artworks -->
+        <div class="related-artworks-section">
+            <h3 class="section-title">You Might Also Like</h3>
+            <div class="related-grid">
+                <!-- Related artworks would be populated here -->
+                <div class="related-item">
+                    <img src="{{ url_for('static', filename='img/feature-slide-2.png') }}" alt="Related Artwork">
+                    <h6>Similar Style</h6>
+                    <p>$45/month</p>
+                </div>
+                <div class="related-item">
+                    <img src="{{ url_for('static', filename='img/feature-slide-3.png') }}" alt="Related Artwork">
+                    <h6>Same Artist</h6>
+                    <p>$38/month</p>
+                </div>
+                <div class="related-item">
+                    <img src="{{ url_for('static', filename='img/feature-slide-1.png') }}" alt="Related Artwork">
+                    <h6>Popular Choice</h6>
+                    <p>$52/month</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ artwork.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
+                     class="img-fluid" alt="{{ artwork.title }}">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openImageModal() {
+    var modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    modal.show();
+}
+
+function changeMainImage(src) {
+    document.getElementById('mainImage').src = src;
+}
+
+function addToWishlist(artworkId) {
+    // Wishlist functionality would be implemented here
+    alert('Added to wishlist!');
+}
+</script>
 {% endblock %}
