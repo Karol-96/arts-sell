@@ -105,8 +105,66 @@ def admin_dashboard():
 
 @main.route('/artworks')
 def artworks():
+    # Get search query and filters
+    query = request.args.get('query', '').strip()
+    sort_by = request.args.get('sort', 'featured')
+    medium_filter = request.args.get('medium', '')
+    price_min = request.args.get('price_min', '')
+    price_max = request.args.get('price_max', '')
+    
+    # Get all artworks
     artworks_list = get_all_artworks()
-    return render_template('artworks.html', title='Browse Artworks', artworks=artworks_list)
+    
+    # Apply search filter
+    if query:
+        artworks_list = [artwork for artwork in artworks_list 
+                        if query.lower() in artwork['title'].lower() 
+                        or query.lower() in artwork['artist_name'].lower()
+                        or query.lower() in artwork['medium'].lower()]
+    
+    # Apply medium filter
+    if medium_filter:
+        artworks_list = [artwork for artwork in artworks_list 
+                        if medium_filter.lower() in artwork['medium'].lower()]
+    
+    # Apply price filters
+    if price_min:
+        try:
+            min_price = float(price_min)
+            artworks_list = [artwork for artwork in artworks_list if artwork['price'] >= min_price]
+        except ValueError:
+            pass
+    
+    if price_max:
+        try:
+            max_price = float(price_max)
+            artworks_list = [artwork for artwork in artworks_list if artwork['price'] <= max_price]
+        except ValueError:
+            pass
+    
+    # Apply sorting
+    if sort_by == 'price_low':
+        artworks_list.sort(key=lambda x: x['price'])
+    elif sort_by == 'price_high':
+        artworks_list.sort(key=lambda x: x['price'], reverse=True)
+    elif sort_by == 'newest':
+        artworks_list.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    elif sort_by == 'popular':
+        # For now, just sort by price as a proxy for popularity
+        artworks_list.sort(key=lambda x: x['price'], reverse=True)
+    
+    # Get unique mediums for filter dropdown
+    mediums = list(set([artwork['medium'] for artwork in get_all_artworks() if artwork['medium']]))
+    
+    return render_template('artworks.html', 
+                         title='Browse Artworks', 
+                         artworks=artworks_list,
+                         query=query,
+                         sort_by=sort_by,
+                         medium_filter=medium_filter,
+                         price_min=price_min,
+                         price_max=price_max,
+                         mediums=mediums)
 
 @main.route('/artwork/<int:artwork_id>')
 def artwork_detail(artwork_id):
