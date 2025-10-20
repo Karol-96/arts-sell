@@ -13,29 +13,29 @@
         <div class="col-md-3">
             <div class="stat-card">
                 <h3>Total Users</h3>
-                <div class="stat-number">1,247</div>
+                <div class="stat-number">{{ stats.total_users }}</div>
                 <p>Registered platform users</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="stat-card">
                 <h3>Active Artists</h3>
-                <div class="stat-number">186</div>
+                <div class="stat-number">{{ stats.total_artists }}</div>
                 <p>Content creators on platform</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="stat-card">
                 <h3>Total Artworks</h3>
-                <div class="stat-number">842</div>
+                <div class="stat-number">{{ stats.total_artworks }}</div>
                 <p>Listed artworks available</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="stat-card">
                 <h3>Revenue</h3>
-                <div class="stat-number">$48.2K</div>
-                <p>Platform revenue this month</p>
+                <div class="stat-number">${{ "%.2f"|format(stats.total_revenue) }}</div>
+                <p>Total platform revenue</p>
             </div>
         </div>
     </div>
@@ -106,25 +106,25 @@
             <div class="action-card">
                 <h5>User Management</h5>
                 <p>View and manage all registered users on the platform.</p>
-                <a href="#" class="btn btn-action w-100 mb-2">Manage Users</a>
+                <a href="{{ url_for('main.admin_users') }}" class="btn btn-action w-100 mb-2">Manage Users</a>
             </div>
             
             <div class="action-card">
-                <h5>Artwork Moderation</h5>
-                <p>Review and approve pending artwork submissions.</p>
-                <a href="#" class="btn btn-action w-100 mb-2">Review Artworks</a>
+                <h5>Order Management</h5>
+                <p>View and update order statuses across the platform.</p>
+                <a href="{{ url_for('main.admin_orders') }}" class="btn btn-action w-100 mb-2">Manage Orders</a>
             </div>
             
             <div class="action-card">
-                <h5>Platform Settings</h5>
-                <p>Configure system settings and platform preferences.</p>
-                <a href="#" class="btn btn-action w-100 mb-2">System Settings</a>
+                <h5>Artwork Management</h5>
+                <p>Review and manage all artworks on the platform.</p>
+                <a href="{{ url_for('main.admin_artworks') }}" class="btn btn-action w-100 mb-2">Manage Artworks</a>
             </div>
             
             <div class="action-card">
-                <h5>Financial Reports</h5>
-                <p>Access detailed financial analytics and reports.</p>
-                <a href="#" class="btn btn-action w-100 mb-2">View Reports</a>
+                <h5>Browse Artworks</h5>
+                <p>View artworks from the customer perspective.</p>
+                <a href="{{ url_for('main.artworks') }}" class="btn btn-action w-100 mb-2">View Gallery</a>
             </div>
         </div>
     </div>

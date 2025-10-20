@@ -46,7 +46,7 @@
                         {% for category, message in messages %}
                             <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
                                 {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="btn-close"></button>
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -55,10 +55,10 @@
                 <div class="profile-tabs">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#personal-info">Personal Information</a>
+                            <span class="nav-link active">Personal Information</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#account-settings">Account Settings</a>
+                            <span class="nav-link">Account Settings</span>
                         </li>
                     </ul>
 

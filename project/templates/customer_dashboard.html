@@ -1,0 +1,125 @@
+{% extends 'layout.html' %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Welcome, {{ current_user.firstname }}!</h2>
+                <a href="{{ url_for('main.artworks') }}" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Browse Artworks
+                </a>
+            </div>
+            
+            <!-- Statistics Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-shopping-bag fa-2x text-primary mb-3"></i>
+                            <h3 class="card-title">{{ data.total_orders }}</h3>
+                            <p class="card-text">Total Orders</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-dollar-sign fa-2x text-success mb-3"></i>
+                            <h3 class="card-title">${{ "%.2f"|format(data.total_spent) }}</h3>
+                            <p class="card-text">Total Spent</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-heart fa-2x text-danger mb-3"></i>
+                            <h3 class="card-title">0</h3>
+                            <p class="card-text">Wishlist Items</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recent Orders</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if data.recent_orders %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in data.recent_orders %}
+                                        <tr>
+                                            <td>#{{ order.id }}</td>
+                                            <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                                            <td>
+                                                <span class="badge {% if order.status == 'pending' %}bg-warning{% elif order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% else %}bg-info{% endif %}">
+                                                    {{ order.status.title() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ order.created_at.strftime('%Y-%m-%d') if order.created_at else 'N/A' }}</td>
+                                            <td>
+                                                <a href="{{ url_for('main.my_orders') }}" class="btn btn-sm btn-outline-primary">
+                                                    View Details
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-shopping-cart fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">No orders yet</p>
+                                <a href="{{ url_for('main.artworks') }}" class="btn btn-primary">Start Shopping</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('main.artworks') }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-search"></i> Browse Artworks
+                                </a>
+                                <a href="{{ url_for('main.basket') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-shopping-cart"></i> View Cart
+                                </a>
+                                <a href="{{ url_for('main.my_orders') }}" class="btn btn-outline-info">
+                                    <i class="fas fa-list"></i> Order History
+                                </a>
+                                <a href="{{ url_for('main.profile') }}" class="btn btn-outline-success">
+                                    <i class="fas fa-user"></i> Edit Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

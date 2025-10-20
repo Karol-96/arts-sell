@@ -18,19 +18,25 @@ CREATE TABLE users (
 
 CREATE TABLE artworks (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    artist_name VARCHAR(100),
-    artist_id INT,
-    description TEXT,
-    medium VARCHAR(100),
-    dimensions VARCHAR(50),
-    price DECIMAL(10, 2) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    artist_id INT NOT NULL,
+	price DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(50),
+	medium VARCHAR(100),
+	height DECIMAL(5, 2) NOT NULL,
+    width DECIMAL(5, 2) NOT NULL,
+	art_origin VARCHAR(100),
+	year_of_publish YEAR,
+	description TEXT,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('available', 'unavailable')),
+	currency VARCHAR(5) DEFAULT '$',
+	size_category VARCHAR(10) CHECK (size_category IN ('small', 'medium', 'large')),
     image_url VARCHAR(255),
-    status VARCHAR(50) DEFAULT 'available',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (artist_id) REFERENCES users(id)
+    FOREIGN KEY (artist_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_artist_id (artist_id),
+    INDEX idx_status (status)
 );
-
 CREATE TABLE cart (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -60,6 +66,24 @@ CREATE TABLE order_items (
     artwork_id INT NOT NULL,
     price DECIMAL(10, 2),
     quantity INT DEFAULT 1,
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (artwork_id) REFERENCES artworks(id)
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE
+);
+
+-- Table to track artwork rentals
+CREATE TABLE rented_artworks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    artwork_id INT NOT NULL,
+    user_id INT NOT NULL,
+    rental_start_date DATE NOT NULL,
+    rental_end_date DATE NOT NULL,
+    monthly_price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'returned', 'extended')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_rentals (user_id),
+    INDEX idx_artwork_rentals (artwork_id)
 );

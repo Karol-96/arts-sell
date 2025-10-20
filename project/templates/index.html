@@ -2,14 +2,14 @@
 
 {% block header %}
     <!--Carousel-->
-    <div class="carousel slide" id="banner-head" data-bs-ride="carousel">
+    <div class="carousel slide" id="banner-head">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="{{ url_for('static', filename='img/feature-slide-1.png') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h4>NEW THIS WEEK</h4>
                     <p>Discover New Arts We Pick This Week</p>
-                    <a href="{{ url_for('main.index') }}">EXPLORE NOW</a>
+                    <a href="{{ url_for('main.artworks') }}" class="btn btn-explore">EXPLORE NOW</a>
                 </div>
             </div>
             <div class="carousel-item">
@@ -17,7 +17,7 @@
                 <div class="carousel-caption d-none d-md-block">
                     <h4>RECOMMENDATIONS</h4>
                     <p>Work With Us to Find Your Perfect Artworks</p>
-                    <a href="{{ url_for('main.index') }}">GET STARTED</a>
+                    <a href="{{ url_for('main.artworks') }}" class="btn btn-explore">GET STARTED</a>
                 </div>
             </div>
             <div class="carousel-item">
@@ -25,15 +25,15 @@
                 <div class="carousel-caption d-none d-md-block">
                     <h4>HAVE ARTWORKS FOR LEASE?</h4>
                     <p>Join Us Now To Enjoy Our Perks For Creators</p>
-                    <a href="{{ url_for('main.register_artist') }}">JOIN AS ARTIST</a>
+                    <a href="{{ url_for('main.register_artist') }}" class="btn btn-explore">JOIN AS ARTIST</a>
                 </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#banner-head" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#banner-head" data-bs-slide="next">
+        <button class="carousel-control-next" type="button">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
@@ -41,19 +41,60 @@
 {% endblock %}
 
 {% block main %}
+    <!-- Hero Stats Section -->
+    <div class="hero-stats-section">
+        <div class="container">
+            <div class="row text-center py-5">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item">
+                        <h2 class="stat-number">500+</h2>
+                        <p class="stat-label">Artworks Available</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item">
+                        <h2 class="stat-number">50+</h2>
+                        <p class="stat-label">Featured Artists</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item">
+                        <h2 class="stat-number">1000+</h2>
+                        <p class="stat-label">Happy Customers</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item">
+                        <h2 class="stat-number">4.9★</h2>
+                        <p class="stat-label">Customer Rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--Feature Introduction-->
     <div class="intro-container">
-        <h3 class="text-center py-3">Experience the Joy of Living with Original Art</h3>
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold text-dark mb-3">Experience the Joy of Living with Original Art</h2>
+            <p class="lead text-muted mb-4">Transform your space with curated masterpieces from world-renowned artists. Lease authentic artworks monthly and refresh your collection whenever you desire.</p>
+        </div>
+        
         <div class="row justify-content-center g-4">
             {% for tile in tiles %}
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card border-0 bg-transparent">
-                        <a href="{{ tile.url }}" class="{{ tile.link_title }}">
-                            <img src="{{ url_for('static', filename=tile.img) }}" alt="{{ tile.title }}" class="img-fluid rounded">
+                    <div class="feature-card">
+                        <a href="{{ tile.url }}" class="feature-link">
+                            <div class="feature-image-container">
+                                <img src="{{ url_for('static', filename=tile.img) }}" alt="{{ tile.title }}" class="feature-image">
+                                <div class="feature-overlay">
+                                    <span class="feature-icon">→</span>
+                                </div>
+                            </div>
                         </a>
-                        <div class="mt-2">
-                            <h6 class="fw-semibold">{{ tile.title }}</h6>
-                            <a href="{{ tile.url }}" class="text-decoration-none text-dark small text-uppercase">
+                        <div class="feature-content">
+                            <h5 class="feature-title">{{ tile.title }}</h5>
+                            <a href="{{ tile.url }}" class="feature-cta">
                                 {{ tile.link_title }}
                             </a>
                         </div>
@@ -62,5 +103,70 @@
             {% endfor %}
         </div>
     </div>
-    <br><br><br>
+
+    <!-- Why Choose ArtSpace Section -->
+    <div class="why-choose-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="display-5 fw-bold mb-4">Why Choose ArtSpace?</h2>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon-wrapper">
+                                <i class="feature-icon">🎨</i>
+                            </div>
+                            <div class="feature-text">
+                                <h5>Curated Collection</h5>
+                                <p>Handpicked artworks from emerging and established artists worldwide</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-wrapper">
+                                <i class="feature-icon">💳</i>
+                            </div>
+                            <div class="feature-text">
+                                <h5>Flexible Leasing</h5>
+                                <p>Monthly subscriptions with no long-term commitments</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-wrapper">
+                                <i class="feature-icon">🚚</i>
+                            </div>
+                            <div class="feature-text">
+                                <h5>Free Delivery & Setup</h5>
+                                <p>Professional installation and pickup service included</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-wrapper">
+                                <i class="feature-icon">🔄</i>
+                            </div>
+                            <div class="feature-text">
+                                <h5>Easy Exchange</h5>
+                                <p>Swap artworks anytime to refresh your space</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="showcase-image">
+                        <img src="{{ url_for('static', filename='img/feature-slide-2.png') }}" alt="ArtSpace Showcase" class="img-fluid rounded-4 shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="cta-section">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold text-white mb-4">Ready to Transform Your Space?</h2>
+            <p class="lead text-white-50 mb-4">Join thousands of art lovers who have discovered the joy of living with original art</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('main.artworks') }}" class="btn btn-cta-primary btn-lg me-3">Browse Collection</a>
+                <a href="{{ url_for('main.register_customer') }}" class="btn btn-cta-secondary btn-lg">Start Free Trial</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+
+{% block title %}My Artworks{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>My Artworks</h2>
+                <div>
+                    <a href="{{ url_for('main.artist_upload_artwork') }}" class="btn btn-primary me-2">
+                        <i class="fas fa-plus"></i> Upload New Artwork
+                    </a>
+                    <a href="{{ url_for('main.artist_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All My Artworks</h5>
+                </div>
+                <div class="card-body">
+                    {% if artworks %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Medium</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for artwork in artworks %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ url_for('static', filename=artwork.image_url) }}" 
+                                             alt="{{ artwork.title }}" 
+                                             style="width: 60px; height: 60px; object-fit: cover;">
+                                    </td>
+                                    <td>
+                                        <strong>{{ artwork.title }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ artwork.dimensions }}</small>
+                                    </td>
+                                    <td>{{ artwork.medium }}</td>
+                                    <td>${{ "%.2f"|format(artwork.price) }}</td>
+                                    <td>
+                                        <span class="badge {% if artwork.status == 'available' %}bg-success{% elif artwork.status == 'sold' %}bg-danger{% else %}bg-warning{% endif %}">
+                                            {{ artwork.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ artwork.created_at.strftime('%Y-%m-%d') if artwork.created_at else 'N/A' }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('main.artist_edit_artwork', artwork_id=artwork.id) }}" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <form method="POST" action="{{ url_for('main.artist_delete_artwork', artwork_id=artwork.id) }}" 
+                                                  style="display: inline;">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-palette fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No artworks uploaded yet</h5>
+                        <p class="text-muted">Start building your portfolio by uploading your first artwork.</p>
+                        <a href="{{ url_for('main.artist_upload_artwork') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Upload Your First Artwork
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

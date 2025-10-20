@@ -1,11 +1,29 @@
-INSERT INTO artworks (title, artist_name, description, medium, dimensions, price, image_url, status) VALUES
-('Abstract Sunset', 'Sarah Johnson', 'A vibrant abstract piece capturing the essence of sunset', 'Acrylic on canvas', '24x36 inches', 450.00, 'img/feature-slide-1.png', 'available'),
-('Mountain Serenity', 'Michael Chen', 'Peaceful mountain landscape with morning mist', 'Oil on canvas', '30x40 inches', 680.00, 'img/feature-slide-2.png', 'available'),
-('Ocean Waves', 'Emma Davis', 'Dynamic watercolor depicting crashing ocean waves', 'Watercolor', '18x24 inches', 320.00, 'img/feature-slide-3.png', 'available'),
-('Urban Dreams', 'David Martinez', 'Contemporary cityscape with mixed media textures', 'Mixed media', '20x30 inches', 540.00, 'img/feature-slide-1.png', 'available'),
-('Forest Path', 'Lisa Anderson', 'Tranquil forest scene in autumn colors', 'Oil on canvas', '24x32 inches', 590.00, 'img/feature-slide-2.png', 'available'),
-('City Lights', 'James Wilson', 'Night city view with vibrant acrylic colors', 'Acrylic on canvas', '28x40 inches', 720.00, 'img/feature-slide-3.png', 'available'),
-('Desert Bloom', 'Anna Thompson', 'Desert flowers in delicate watercolor', 'Watercolor', '16x20 inches', 280.00, 'img/feature-slide-1.png', 'available'),
-('Cosmic Energy', 'Robert Taylor', 'Abstract space-inspired composition', 'Acrylic on canvas', '36x48 inches', 890.00, 'img/feature-slide-2.png', 'available'),
-('Tranquil Garden', 'Maria Garcia', 'Japanese garden in peaceful setting', 'Oil on canvas', '22x28 inches', 510.00, 'img/feature-slide-3.png', 'available');
-
+USE artsell;
+INSERT INTO `artworks` (title, artist_id, price, category, medium, height, width, art_origin, year_of_publish, description, status, currency, size_category, image_url, created_at)
+VALUES 
+('Lindisfarne Castle, Holy Island, Northumberland', 1, 450.00, 'drawing', 'watercolor and bodycolor', 38.10, 52.00, 'UK', 2021, 'Holy Island is dramatically situated on the coast of Northumbria...', 'available', '$', 'large', '/img/1.jpg', '2025-10-02 06:02:00'),
+('Loggia of the Ducal Palace, Venice', 1, 180.00, 'drawing', 'watercolor over graphite', 46.00, 29.00, 'UK', 2023, 'Ruskin painstakingly depicted the shafts, capitals, and ogival lacework...', 'available', '$', 'small', '/img/2.jpg', '2025-08-12 06:02:00'),
+('The Chariot of Apollo', 1, 320.00, 'painting', 'oil on canvas', 66.00, 81.30, 'France', 2024, 'About 1900 Redon abandoned his trademark black charcoal drawings...', 'available', '$', 'medium', '/img/3.jpg', '2023-10-12 06:02:00'),
+('Landscape', 1, 220.00, 'drawing', 'watercolor', 28.10, 19.80, 'France', 2000, 'Late in his career, the landscape painter Harpignies made repeated visits...', 'available', '$', 'medium', '/img/4.jpg', '2024-10-12 06:02:00'),
+('Sheep', 1, 600.00, 'photograph', 'gum bichromate print', 50.20, 64.60, 'Austria', 2011, 'In photographs such as this charming pastoral image of grazing sheep...', 'available', '$', 'medium', '/img/5.jpg', '2023-11-12 06:02:00'),
+('Basketball', 1, 480.00, 'drawing', 'opaque watercolor on paper', 48.70, 64.50, 'America', 2015, 'Pennsylvania W.P.A. (1935–43; their gift to MMA)', 'available', '$', 'large', '/img/6.jpg', '2022-12-12 06:02:00'),
+('Corridor in the Asylum', 1, 390.00, 'drawing', 'brush and oils on laid paper', 65.10, 49.10, 'Netherlands', 2019, 'Struggles with his mental health led Van Gogh to admit himself...', 'available', '$', 'medium', '/img/7.jpg', '2025-10-12 06:02:00'),
+('Sketchbook of Greek and Near East Subjects', 2, 150.00, 'drawing', 'watercolor', 13.30, 20.30, 'America', 2018, 'This image represents one of forty-four drawings...', 'available', '$', 'small', '/img/8.jpg', '2025-10-12 06:02:00'),
+('The Lake of Zug', 2, 950.00, 'drawing', 'watercolor and bodycolor', 29.80, 46.60, 'UK', 2022, 'Returning from an extended sojourn in the Swiss Alps...', 'available', '$', 'large', '/img/9.jpg', '2025-10-12 06:02:00'),
+('The Farm at Les Collettes, Cagnes', 2, 100.00, 'painting', 'oil on canvas', 54.60, 65.40, 'France', 2000, 'In 1907, Renoir purchased the estate of Les Collettes at Cagnes...', 'available', '$', 'small', '/img/10.jpg', '2025-10-12 06:02:00'),
+('In Hot Pursuit', 2, 280.00, 'painting', 'oil on canvas', 86.70, 62.90, 'America', 2011, 'This work depicts an armed Native American on a galloping horse...', 'available', '$', 'medium', '/img/11.jpg', '2025-10-12 06:02:00'),
+('View of the Colosseum from the Basilica', 2, 420.00, 'drawing', 'watercolor', 25.60, 36.80, 'France', 2012, 'It was in Italy that landscape painter Harpignies first took up watercolor...', 'available', '$', 'medium', '/img/12.jpg', '2025-10-12 06:02:00'),
+('Young Girl Carrying a Basket', 2, 700.00, 'drawing', 'pen and ink', 11.40, 8.90, 'America', 2009, 'Abbey drew this holdiay card to send good wishes...', 'available', '$', 'large', '/img/13.jpg', '2025-10-12 06:02:00'),
+('View from the Ramparts at Chartres', 3, 300.00, 'drawing', 'watercolor', 30.50, 22.60, 'France', 2008, '', 'available', '$', 'medium', '/img/14.jpg', '2025-10-12 06:02:00'),
+('Rose Hedge', 3, 140.00, 'painting', 'oil on canvas', 75.90, 61.50, 'Germany', 2023, 'This painting depicts the garden of the Villa Knorr...', 'available', '$', 'small', '/img/15.jpg', '2025-10-12 06:02:00'),
+('The Creation of the World and the Expulsion from Paradise', 3, 510.00, 'painting', 'tempera and gold on wood', 45.40, 52.10, 'Italia', 2021, 'This masterpiece of Sienese painting combines Giovanni di Paolo’s...', 'available', '$', 'large', '/img/16.jpg', '2025-10-12 06:02:00'),
+('Valley with Fir', 3, 370.00, 'painting', 'oil on canvas', 73.70, 90.20, 'France', 2022, 'Henri-Edmond Cross was a practitioner of the Neoimpressionist style...', 'available', '$', 'medium', '/img/17.jpg', '2025-10-12 06:02:00'),
+('Night of the Festival of the Redeemer', 3, 190.00, 'drawing', 'watercolor on wove paper', 14.00, 24.30, 'France', 2024, 'While collaborating and traveling with his friend Paul Signac...', 'available', '$', 'small', '/img/18.jpg', '2025-10-12 06:02:00'),
+('Two Figures by a Small Watergate', 3, 80.00, 'printing', 'etching on blue paper', 17.20, 22.50, 'France', 2000, '', 'available', '$', 'small', '/img/19.jpg', '2025-10-12 06:02:00'),
+('Haircutting in Front of General Store...', 3, 650.00, 'photograph', 'gelatin silver print', 25.00, 32.20, 'America', 2001, 'Marion Post Wolcott was hired by the FSA in October 1938...', 'available', '$', 'large', '/img/20.jpg', '2025-10-11 06:02:00'),
+('Buzz Aldrin Walking on the Surface of the Moon', 3, 210.00, 'photograph', 'dye diffusion thermal transfer', 17.10, 25.60, 'America', 2003, 'Astronaut Buzz Aldrin, Lunar Module pilot, walks on the surface of the Moon...', 'available', '$', 'medium', '/img/21.jpg', '2025-10-12 06:02:00'),
+('Perspective View from a series of Mines and Factories', 3, 400.00, 'drawing', 'watercolor', 38.10, 45.10, 'France', 2005, '', 'available', '$', 'medium', '/img/22.jpg', '2025-10-12 06:02:00'),
+('A Successful Hunt', 3, 130.00, 'painting', 'watercolor', 37.10, 23.30, 'America', 2004, 'While his contemporaries, including artists Frederic Remington...', 'available', '$', 'small', '/img/23.jpg', '2025-10-12 06:02:00'),
+('The Trees, Early Afternoon, France', 3, 250.00, 'painting', 'oil on canvas', 50.80, 66.00, 'America', 2016, 'This rare work by the Black American landscape painter Harper...', 'available', '$', 'medium', '/img/24.jpg', '2025-10-12 06:02:00'),
+('The Yard of the Inn at Emmaus', 3, 780.00, 'painting', 'oil on canvas', 90.50, 115.30, 'Finland', 2018, 'The subject is taken from Luke 24:13–32...', 'available', '$', 'large', '/img/25.jpg', '2025-10-12 06:02:00'),
+('Le Cap Martin', 3, 310.00, 'drawing', 'charcoal on laid paper', 38.70, 53.50, 'France', 2019, '', 'available', '$', 'medium', '/img/26.jpg', '2025-10-12 06:02:00');
