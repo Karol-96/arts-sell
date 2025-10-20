@@ -34,18 +34,6 @@
                         </div>
                         
                         <div class="mb-3">
-                            {{ form.artist_name.label(class="form-label") }}
-                            {{ form.artist_name(class="form-control") }}
-                            {% if form.artist_name.errors %}
-                                <div class="text-danger">
-                                    {% for error in form.artist_name.errors %}
-                                        <small>{{ error }}</small>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="mb-3">
                             {{ form.description.label(class="form-label") }}
                             {{ form.description(class="form-control", rows="4") }}
                             {% if form.description.errors %}
@@ -73,11 +61,24 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    {{ form.dimensions.label(class="form-label") }}
-                                    {{ form.dimensions(class="form-control") }}
-                                    {% if form.dimensions.errors %}
+                                    {{ form.height.label(class="form-label") }}
+                                    {{ form.height(class="form-control") }}
+                                    {% if form.height.errors %}
                                         <div class="text-danger">
-                                            {% for error in form.dimensions.errors %}
+                                            {% for error in form.height.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.width.label(class="form-label") }}
+                                    {{ form.width(class="form-control") }}
+                                    {% if form.width.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.width.errors %}
                                                 <small>{{ error }}</small>
                                             {% endfor %}
                                         </div>

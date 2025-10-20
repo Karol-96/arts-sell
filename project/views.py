@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 from project.forms import (RegistrationForm, ArtistRegistrationForm, LoginForm, ProfileForm,
                           ArtworkUploadForm, ArtworkEditForm, UserManagementForm, OrderStatusForm)
-from project.db import (create_user, get_user_by_username, update_user_profile, 
+from project.db import (create_user, get_user_by_username, get_user_by_id, update_user_profile, 
                         get_all_artworks, get_artwork_by_id, add_to_cart, 
                         get_cart_items, remove_from_cart, get_cart_total,
                         create_order, get_user_orders, get_cart_count,
@@ -79,7 +79,7 @@ def login():
             elif user.role == 'artist':
                 return redirect(url_for('main.artist_dashboard'))
             elif user.role == 'customer':
-                return redirect(url_for('main.customer_dashboard'))
+                return redirect(url_for('main.profile'))
             else:
                 return redirect(url_for('main.index'))
         else:
@@ -102,8 +102,6 @@ def profile():
         flash('Profile updated successfully', 'success')
         return redirect(url_for('main.profile'))
     return render_template('profile.html', form=form, title='Profile')
-    
-
 
 @main.route('/artworks')
 def artworks():

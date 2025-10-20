@@ -131,7 +131,7 @@
                     <div class="artwork-card h-100">
                         <div class="artwork-image-container">
                             <a href="{{ url_for('main.artwork_detail', artwork_id=artwork.id) }}" class="artwork-link">
-                                <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
+                                <img src="{{ url_for('static', filename=artwork.image_url.lstrip('\\') if artwork.image_url else 'img/placeholder.png') }}" 
                                      alt="{{ artwork.title }}" class="artwork-image">
                                 <div class="artwork-overlay">
                                     <div class="overlay-content">
@@ -140,7 +140,11 @@
                                 </div>
                             </a>
                             <div class="artwork-badge">
-                                <span class="badge bg-success">Available</span>
+                                {% if artwork.status == 'available' %}
+                                    <span class="badge bg-success">Available</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Rented</span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="artwork-content d-flex flex-column">
@@ -154,12 +158,18 @@
                                     <span class="artwork-price h5 text-primary">${{ "%.2f"|format(artwork.price) }}/month</span>
                                     <small class="price-label d-block text-muted">Monthly Lease</small>
                                 </div>
-                                <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" 
-                                      class="add-to-cart-form mt-2">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="cart-icon">🛒</i> Add to Cart
+                                {% if artwork.status == 'available' %}
+                                    <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" 
+                                          class="add-to-cart-form mt-2">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="cart-icon">🛒</i> Add to Cart
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <button type="button" class="btn btn-secondary w-100 mt-2" disabled>
+                                        <i class="cart-icon">🚫</i> Currently Rented
                                     </button>
-                                </form>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
