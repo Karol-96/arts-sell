@@ -26,8 +26,8 @@
                         <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
                              class="main-artwork-image" alt="{{ artwork.title }}" id="mainImage">
                         <div class="image-overlay">
-                            <button class="btn btn-overlay" onclick="openImageModal()">
-                                <i class="zoom-icon">🔍</i> Zoom
+                            <button class="btn btn-overlay" disabled>
+                                <i class="zoom-icon">🔍</i> Zoom (Disabled)
                             </button>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                     <div class="thumbnail-gallery">
                         <div class="thumbnail-item active">
                             <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
-                                 alt="{{ artwork.title }}" onclick="changeMainImage(this.src)">
+                                 alt="{{ artwork.title }}">
                         </div>
                         <!-- Additional thumbnails can be added here -->
                     </div>
@@ -93,8 +93,8 @@
                                     <i class="cart-icon">🛒</i> Add to Lease Cart
                                 </button>
                             </form>
-                            <button class="btn btn-wishlist" onclick="addToWishlist({{ artwork.id }})">
-                                <i class="heart-icon">♡</i> Add to Wishlist
+                            <button class="btn btn-wishlist" disabled>
+                                <i class="heart-icon">♡</i> Wishlist (Disabled)
                             </button>
                         {% else %}
                             <a href="{{ url_for('main.login') }}" class="btn btn-add-to-cart">
@@ -131,24 +131,16 @@
                 <div class="col-12">
                     <ul class="nav nav-tabs detail-tabs" id="artworkTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
-                                Description
-                            </button>
+                            <span class="nav-link active">Description</span>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="specifications-tab" data-bs-toggle="tab" data-bs-target="#specifications" type="button" role="tab">
-                                Specifications
-                            </button>
+                            <span class="nav-link">Specifications</span>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
-                                Reviews (127)
-                            </button>
+                            <span class="nav-link">Reviews (127)</span>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">
-                                Delivery & Setup
-                            </button>
+                            <span class="nav-link">Delivery & Setup</span>
                         </li>
                     </ul>
                     
@@ -354,7 +346,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ artwork.title }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close"></button>
             </div>
             <div class="modal-body text-center">
                 <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
@@ -364,19 +356,4 @@
     </div>
 </div>
 
-<script>
-function openImageModal() {
-    var modal = new bootstrap.Modal(document.getElementById('imageModal'));
-    modal.show();
-}
-
-function changeMainImage(src) {
-    document.getElementById('mainImage').src = src;
-}
-
-function addToWishlist(artworkId) {
-    // Wishlist functionality would be implemented here
-    alert('Added to wishlist!');
-}
-</script>
 {% endblock %}

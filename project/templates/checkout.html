@@ -1,365 +1,170 @@
 {% extends 'layout.html' %}
 
-{% block title %}Checkout - ArtSpace{% endblock %}
+{% block title %}Checkout{% endblock %}
 
 {% block main %}
-<div class="checkout-container">
-    <!-- Progress Steps -->
-    <div class="checkout-progress">
-        <div class="container">
-            <div class="progress-steps">
-                <div class="step completed">
-                    <div class="step-number">1</div>
-                    <div class="step-label">Lease Cart</div>
-                </div>
-                <div class="step completed">
-                    <div class="step-number">2</div>
-                    <div class="step-label">Checkout</div>
-                </div>
-                <div class="step active">
-                    <div class="step-number">3</div>
-                    <div class="step-label">Confirmation</div>
-                </div>
-            </div>
-        </div>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Checkout</h1>
+        <p>Complete your purchase securely</p>
     </div>
 
-    <div class="container">
-        <div class="checkout-header">
-            <h1 class="display-5 fw-bold text-center mb-3">Complete Your Lease Subscription</h1>
-            <p class="lead text-center text-muted mb-5">Review your order details and complete your monthly art lease subscription securely.</p>
-        </div>
-
-        <form method="POST" action="{{ url_for('main.process_payment') }}" class="checkout-form">
-            <div class="row g-5">
-                <div class="col-lg-8">
-                    <!-- Delivery Information Section -->
-                    <div class="checkout-section">
-                        <div class="section-header">
-                            <h4 class="section-title">
-                                <i class="section-icon">🚚</i>
-                                Delivery & Setup Information
-                            </h4>
-                            <p class="section-subtitle">We'll deliver and professionally install your artwork</p>
-                        </div>
+    <form method="POST" action="{{ url_for('main.process_payment') }}">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="profile-section mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-4">Shipping Information</h5>
                         
-                        <div class="section-content">
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">First Name</label>
-                                    <input type="text" class="form-control form-control-lg" value="{{ current_user.firstname }}" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Last Name</label>
-                                    <input type="text" class="form-control form-control-lg" value="{{ current_user.lastname }}" readonly>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" value="{{ current_user.firstname }}" readonly>
                             </div>
-
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">Email Address</label>
-                                <input type="email" class="form-control form-control-lg" value="{{ current_user.email }}" readonly>
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">Phone Number</label>
-                                <input type="text" class="form-control form-control-lg" value="{{ current_user.phone if current_user.phone else 'Not provided' }}" readonly>
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">Delivery Address</label>
-                                <textarea class="form-control form-control-lg" rows="3" readonly>{{ current_user.address if current_user.address else 'Please update your profile with delivery address' }}</textarea>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <label class="form-label fw-semibold">City</label>
-                                    <input type="text" class="form-control form-control-lg" value="{{ current_user.city if current_user.city else 'N/A' }}" readonly>
-                                </div>
-                                <div class="col-md-3 mb-4">
-                                    <label class="form-label fw-semibold">State</label>
-                                    <input type="text" class="form-control form-control-lg" value="{{ current_user.state if current_user.state else 'N/A' }}" readonly>
-                                </div>
-                                <div class="col-md-3 mb-4">
-                                    <label class="form-label fw-semibold">ZIP Code</label>
-                                    <input type="text" class="form-control form-control-lg" value="{{ current_user.zip if current_user.zip else 'N/A' }}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="delivery-options">
-                                <h6 class="fw-semibold mb-3">Delivery Preferences</h6>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="delivery_time" id="morning" value="morning" checked>
-                                            <label class="form-check-label" for="morning">
-                                                <strong>Morning (9 AM - 12 PM)</strong>
-                                                <small class="d-block text-muted">Best for home deliveries</small>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="delivery_time" id="afternoon" value="afternoon">
-                                            <label class="form-check-label" for="afternoon">
-                                                <strong>Afternoon (1 PM - 5 PM)</strong>
-                                                <small class="d-block text-muted">Best for office deliveries</small>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="section-actions">
-                                <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary">
-                                    <i class="edit-icon">✏️</i> Edit Delivery Information
-                                </a>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" value="{{ current_user.lastname }}" readonly>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Payment Information Section -->
-                    <div class="checkout-section">
-                        <div class="section-header">
-                            <h4 class="section-title">
-                                <i class="section-icon">💳</i>
-                                Payment Information
-                            </h4>
-                            <p class="section-subtitle">Secure payment processing for your monthly lease</p>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" value="{{ current_user.email }}" readonly>
                         </div>
-                        
-                        <div class="section-content">
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">Payment Method</label>
-                                <select class="form-select form-select-lg" name="payment_method" required>
-                                    <option value="credit_card">💳 Credit Card</option>
-                                    <option value="debit_card">💳 Debit Card</option>
-                                    <option value="paypal">🅿️ PayPal</option>
-                                    <option value="bank_transfer">🏦 Bank Transfer</option>
-                                </select>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" value="{{ current_user.phone if current_user.phone else 'Not provided' }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Shipping Address</label>
+                            <textarea class="form-control" rows="2" readonly>{{ current_user.address if current_user.address else 'Please update your profile with shipping address' }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" value="{{ current_user.city if current_user.city else 'N/A' }}" readonly>
                             </div>
-
-                            <div class="card-details">
-                                <div class="mb-4">
-                                    <label class="form-label fw-semibold">Card Number</label>
-                                    <input type="text" class="form-control form-control-lg" name="card_number" 
-                                           placeholder="1234 5678 9012 3456" maxlength="19" required>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                        <label class="form-label fw-semibold">Expiration Date</label>
-                                        <input type="text" class="form-control form-control-lg" name="expiry_date" 
-                                               placeholder="MM/YY" maxlength="5" required>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <label class="form-label fw-semibold">CVV</label>
-                                        <input type="text" class="form-control form-control-lg" name="cvv" 
-                                               placeholder="123" maxlength="4" required>
-                                    </div>
-                                </div>
-
-                                <div class="mb-4">
-                                    <label class="form-label fw-semibold">Cardholder Name</label>
-                                    <input type="text" class="form-control form-control-lg" name="card_name" 
-                                           placeholder="Name as it appears on card" required>
-                                </div>
-
-                                <div class="form-check mb-4">
-                                    <input class="form-check-input" type="checkbox" id="save_card" name="save_card">
-                                    <label class="form-check-label" for="save_card">
-                                        <strong>Save payment method for future leases</strong>
-                                        <small class="d-block text-muted">Securely store your payment information for easy monthly renewals</small>
-                                    </label>
-                                </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">State</label>
+                                <input type="text" class="form-control" value="{{ current_user.state if current_user.state else 'N/A' }}" readonly>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">ZIP</label>
+                                <input type="text" class="form-control" value="{{ current_user.zip if current_user.zip else 'N/A' }}" readonly>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Lease Terms Section -->
-                    <div class="checkout-section">
-                        <div class="section-header">
-                            <h4 class="section-title">
-                                <i class="section-icon">📋</i>
-                                Lease Terms & Conditions
-                            </h4>
-                            <p class="section-subtitle">Important information about your monthly art lease</p>
-                        </div>
-                        
-                        <div class="section-content">
-                            <div class="lease-terms">
-                                <div class="term-item">
-                                    <h6 class="fw-semibold">Monthly Subscription</h6>
-                                    <p class="text-muted">Your lease automatically renews monthly. You can cancel anytime with 30 days notice.</p>
-                                </div>
-                                <div class="term-item">
-                                    <h6 class="fw-semibold">Free Delivery & Setup</h6>
-                                    <p class="text-muted">Professional installation and pickup service included at no extra cost.</p>
-                                </div>
-                                <div class="term-item">
-                                    <h6 class="fw-semibold">Insurance Coverage</h6>
-                                    <p class="text-muted">All artworks are fully insured during the lease period.</p>
-                                </div>
-                                <div class="term-item">
-                                    <h6 class="fw-semibold">Easy Exchange</h6>
-                                    <p class="text-muted">Swap artworks anytime to refresh your space with new pieces.</p>
-                                </div>
-                            </div>
-
-                            <div class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" id="agree_terms" name="agree_terms" required>
-                                <label class="form-check-label" for="agree_terms">
-                                    <strong>I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a></strong>
-                                </label>
-                            </div>
-                        </div>
+                        <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary btn-sm">Edit Shipping Info</a>
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <!-- Order Summary Card -->
-                    <div class="order-summary-card">
-                        <div class="summary-header">
-                            <h4 class="summary-title">
-                                <i class="summary-icon">📋</i>
-                                Lease Summary
-                            </h4>
-                            <p class="summary-subtitle">Monthly subscription details</p>
+                <div class="profile-section">
+                    <div class="card-body">
+                        <h5 class="mb-4">Payment Information</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label">Payment Method</label>
+                            <select class="form-select" name="payment_method" required>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="debit_card">Debit Card</option>
+                                <option value="paypal">PayPal</option>
+                            </select>
                         </div>
 
-                        <div class="summary-content">
-                            <!-- Artwork Items -->
-                            <div class="artwork-items">
-                                {% for item in items %}
-                                <div class="artwork-item">
-                                    <div class="item-image">
-                                        <img src="{{ url_for('static', filename=item.image_url if item.image_url else 'img/feature-slide-1.png') }}" 
-                                             alt="{{ item.title }}" class="img-fluid">
-                                    </div>
-                                    <div class="item-details">
-                                        <h6 class="item-title">{{ item.title }}</h6>
-                                        <p class="item-artist">by {{ item.artist_name }}</p>
-                                        <p class="item-medium">{{ item.medium }}</p>
-                                    </div>
-                                    <div class="item-price">
-                                        <span class="price">${{ "%.2f"|format(item.price) }}</span>
-                                        <small class="price-period">/month</small>
-                                    </div>
-                                </div>
-                                {% endfor %}
+                        <div class="mb-3">
+                            <label class="form-label">Card Number</label>
+                            <input type="text" class="form-control" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Expiration Date</label>
+                                <input type="text" class="form-control" name="expiry_date" placeholder="MM/YY" maxlength="5" required>
                             </div>
-
-                            <hr class="summary-divider">
-
-                            <!-- Pricing Breakdown -->
-                            <div class="pricing-breakdown">
-                                <div class="price-row">
-                                    <span class="price-label">Monthly Subtotal</span>
-                                    <span class="price-value">${{ "%.2f"|format(subtotal) }}</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="price-label">Delivery & Setup</span>
-                                    <span class="price-value free">FREE</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="price-label">Insurance</span>
-                                    <span class="price-value free">INCLUDED</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="price-label">Tax</span>
-                                    <span class="price-value">${{ "%.2f"|format(tax) }}</span>
-                                </div>
-                            </div>
-
-                            <hr class="summary-divider">
-
-                            <!-- Total -->
-                            <div class="total-section">
-                                <div class="total-row">
-                                    <span class="total-label">Monthly Total</span>
-                                    <span class="total-value">${{ "%.2f"|format(total) }}</span>
-                                </div>
-                                <small class="total-note">Recurring monthly charge</small>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="summary-actions">
-                                <button type="submit" class="btn btn-complete-order w-100 mb-3">
-                                    <i class="btn-icon">✅</i>
-                                    Complete Lease Subscription
-                                </button>
-                                
-                                <a href="{{ url_for('main.basket') }}" class="btn btn-outline-secondary w-100 mb-3">
-                                    <i class="btn-icon">←</i>
-                                    Back to Lease Cart
-                                </a>
-                            </div>
-
-                            <!-- Security Badge -->
-                            <div class="security-badge">
-                                <div class="security-content">
-                                    <i class="security-icon">🔒</i>
-                                    <div class="security-text">
-                                        <strong>Secure Payment</strong>
-                                        <small>SSL Encrypted & PCI Compliant</small>
-                                    </div>
-                                </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control" name="cvv" placeholder="123" maxlength="4" required>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Payment Methods Card -->
-                    <div class="payment-methods-card">
-                        <h6 class="card-title">Accepted Payment Methods</h6>
-                        <div class="payment-methods">
-                            <div class="payment-method">
-                                <i class="payment-icon">💳</i>
-                                <span>Visa</span>
-                            </div>
-                            <div class="payment-method">
-                                <i class="payment-icon">💳</i>
-                                <span>Mastercard</span>
-                            </div>
-                            <div class="payment-method">
-                                <i class="payment-icon">💳</i>
-                                <span>American Express</span>
-                            </div>
-                            <div class="payment-method">
-                                <i class="payment-icon">🅿️</i>
-                                <span>PayPal</span>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cardholder Name</label>
+                            <input type="text" class="form-control" name="card_name" placeholder="Name on card" required>
                         </div>
-                    </div>
 
-                    <!-- Customer Support Card -->
-                    <div class="support-card">
-                        <h6 class="card-title">Need Help?</h6>
-                        <div class="support-options">
-                            <div class="support-option">
-                                <i class="support-icon">📞</i>
-                                <div class="support-text">
-                                    <strong>Call Us</strong>
-                                    <small>1-800-ART-LEASE</small>
-                                </div>
-                            </div>
-                            <div class="support-option">
-                                <i class="support-icon">💬</i>
-                                <div class="support-text">
-                                    <strong>Live Chat</strong>
-                                    <small>Available 24/7</small>
-                                </div>
-                            </div>
-                            <div class="support-option">
-                                <i class="support-icon">📧</i>
-                                <div class="support-text">
-                                    <strong>Email</strong>
-                                    <small>support@artspace.com</small>
-                                </div>
-                            </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="save_card" name="save_card">
+                            <label class="form-check-label" for="save_card">
+                                Save card for future purchases
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+
+            <div class="col-lg-4">
+                <div class="action-card">
+                    <h5 class="mb-4">Order Summary</h5>
+
+                    {% for item in items %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small">{{ item.title }}</span>
+                        <span class="small">${{ "%.2f"|format(item.price) }}</span>
+                    </div>
+                    {% endfor %}
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal</span>
+                        <span>${{ "%.2f"|format(subtotal) }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span>${{ "%.2f"|format(shipping) }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Tax</span>
+                        <span>${{ "%.2f"|format(tax) }}</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total</strong>
+                        <strong class="artwork-price">${{ "%.2f"|format(total) }}</strong>
+                    </div>
+
+                    <button type="submit" class="btn btn-action w-100 mb-3">Complete Purchase</button>
+
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-lock" viewBox="0 0 16 16">
+                                <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+                                <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415"/>
+                            </svg>
+                            Secure SSL Encrypted Payment
+                        </small>
+                    </div>
+                </div>
+
+                <div class="action-card mt-3">
+                    <p class="small text-muted mb-2">We accept:</p>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-secondary">Visa</span>
+                        <span class="badge bg-secondary">Mastercard</span>
+                        <span class="badge bg-secondary">Amex</span>
+                        <span class="badge bg-secondary">PayPal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
+

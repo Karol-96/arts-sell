@@ -199,3 +199,279 @@ def get_cart_count(user_id):
     result = cur.fetchone()
     cur.close()
     return result['count'] if result and result['count'] else 0
+
+# ============ ADMIN FUNCTIONS ============
+
+def get_all_users():
+    """Get all users for admin management"""
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users ORDER BY created_at DESC")
+    users = cur.fetchall()
+    cur.close()
+    return users
+
+def update_user_role(user_id, new_role):
+    """Update user role (admin function)"""
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("UPDATE users SET role = %s WHERE id = %s", (new_role, user_id))
+        mysql.connection.commit()
+        return True
+    except Exception as e:
+        mysql.connection.rollback()
+        return False
+    finally:
+        cur.close()
+
+def get_all_orders():
+    """Get all orders for admin management"""
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        SELECT o.*, u.firstname, u.lastname, u.email
+        FROM orders o
+        JOIN users u ON o.user_id = u.id
+        ORDER BY o.created_at DESC
+    """)
+    orders = cur.fetchall()
+    cur.close()
+    return orders
+
+def update_order_status(order_id, new_status):
+    """Update order status (admin function)"""
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("UPDATE orders SET status = %s WHERE id = %s", (new_status, order_id))
+        mysql.connection.commit()
+        return True
+    except Exception as e:
+        mysql.connection.rollback()
+        return False
+    finally:
+        cur.close()
+
+def get_order_details(order_id):
+    """Get detailed order information"""
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        SELECT o.*, u.firstname, u.lastname, u.email, u.phone
+        FROM orders o
+        JOIN users u ON o.user_id = u.id
+        WHERE o.id = %s
+    """, (order_id,))
+    order = cur.fetchone()
+    cur.close()
+    return order
+
+def get_order_items(order_id):
+    """Get items in an order"""
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        SELECT oi.*, a.title, a.artist_name, a.image_url
+        FROM order_items oi
+        JOIN artworks a ON oi.artwork_id = a.id
+        WHERE oi.order_id = %s
+    """, (order_id,))
+    items = cur.fetchall()
+    cur.close()
+    return items
+
+def get_admin_statistics():
+    """Get statistics for admin dashboard"""
+    cur = mysql.connection.cursor()
+    
+    # Total users
+    cur.execute("SELECT COUNT(*) as total FROM users")
+    total_users = cur.fetchone()['total']
+    
+    # Total artists
+    cur.execute("SELECT COUNT(*) as total FROM users WHERE role = 'artist'")
+    total_artists = cur.fetchone()['total']
+    
+    # Total artworks
+    cur.execute("SELECT COUNT(*) as total FROM artworks")
+    total_artworks = cur.fetchone()['total']
+    
+    # Total revenue
+    cur.execute("SELECT SUM(total_amount) as total FROM orders WHERE status != 'cancelled'")
+    total_revenue = cur.fetchone()['total'] or 0
+    
+    cur.close()
+    return {
+        'total_users': total_users,
+        'total_artists': total_artists,
+        'total_artworks': total_artworks,
+        'total_revenue': total_revenue
+    }
+
+# ============ ARTIST FUNCTIONS ============
+
+def upload_artwork(form, artist_id, image_filename):
+    """Upload new artwork by artist"""
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("""
+            INSERT INTO artworks (title, artist_name, artist_id, description, medium, dimensions, price, image_url, status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            form.title.data,
+            form.artist_name.data,
+            artist_id,
+            form.description.data,
+            form.medium.data,
+            form.dimensions.data,
+            form.price.data,
+            f'img/uploads/{image_filename}',
+            'available'
+        ))
+        mysql.connection.commit()
+        return cur.lastrowid
+    except Exception as e:
+        mysql.connection.rollback()
+        raise e
+    finally:
+        cur.close()
+
+def get_artist_artworks(artist_id):
+    """Get all artworks by a specific artist"""
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM artworks WHERE artist_id = %s ORDER BY created_at DESC", (artist_id,))
+    artworks = cur.fetchall()
+    cur.close()
+    return artworks
+
+def update_artwork(artwork_id, form, artist_id=None):
+    """Update artwork details"""
+    cur = mysql.connection.cursor()
+    try:
+        if artist_id:
+            # Artist can only update their own artworks
+            cur.execute("""
+                UPDATE artworks 
+                SET title = %s, artist_name = %s, description = %s, medium = %s, dimensions = %s, price = %s
+                WHERE id = %s AND artist_id = %s
+            """, (form.title.data, form.artist_name.data, form.description.data, 
+                  form.medium.data, form.dimensions.data, form.price.data, artwork_id, artist_id))
+        else:
+            # Admin can update any artwork
+            cur.execute("""
+                UPDATE artworks 
+                SET title = %s, artist_name = %s, description = %s, medium = %s, dimensions = %s, price = %s, status = %s
+                WHERE id = %s
+            """, (form.title.data, form.artist_name.data, form.description.data, 
+                  form.medium.data, form.dimensions.data, form.price.data, form.status.data, artwork_id))
+        mysql.connection.commit()
+        return True
+    except Exception as e:
+        mysql.connection.rollback()
+        return False
+    finally:
+        cur.close()
+
+def delete_artwork(artwork_id, artist_id=None):
+    """Delete artwork"""
+    cur = mysql.connection.cursor()
+    try:
+        if artist_id:
+            # Artist can only delete their own artworks
+            cur.execute("DELETE FROM artworks WHERE id = %s AND artist_id = %s", (artwork_id, artist_id))
+        else:
+            # Admin can delete any artwork
+            cur.execute("DELETE FROM artworks WHERE id = %s", (artwork_id,))
+        mysql.connection.commit()
+        return True
+    except Exception as e:
+        mysql.connection.rollback()
+        return False
+    finally:
+        cur.close()
+
+def get_artist_orders(artist_id):
+    """Get orders for artworks by a specific artist"""
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        SELECT DISTINCT o.*, u.firstname, u.lastname, u.email
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        JOIN artworks a ON oi.artwork_id = a.id
+        JOIN users u ON o.user_id = u.id
+        WHERE a.artist_id = %s
+        ORDER BY o.created_at DESC
+    """, (artist_id,))
+    orders = cur.fetchall()
+    cur.close()
+    return orders
+
+def get_artist_statistics(artist_id):
+    """Get statistics for artist dashboard"""
+    cur = mysql.connection.cursor()
+    
+    # Total artworks by artist
+    cur.execute("SELECT COUNT(*) as total FROM artworks WHERE artist_id = %s", (artist_id,))
+    total_artworks = cur.fetchone()['total']
+    
+    # Total sales
+    cur.execute("""
+        SELECT COUNT(DISTINCT o.id) as total
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        JOIN artworks a ON oi.artwork_id = a.id
+        WHERE a.artist_id = %s AND o.status != 'cancelled'
+    """, (artist_id,))
+    total_sales = cur.fetchone()['total']
+    
+    # Total revenue
+    cur.execute("""
+        SELECT SUM(oi.price * oi.quantity) as total
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        JOIN artworks a ON oi.artwork_id = a.id
+        WHERE a.artist_id = %s AND o.status != 'cancelled'
+    """, (artist_id,))
+    total_revenue = cur.fetchone()['total'] or 0
+    
+    cur.close()
+    return {
+        'total_artworks': total_artworks,
+        'total_sales': total_sales,
+        'total_revenue': total_revenue
+    }
+
+# ============ CUSTOMER FUNCTIONS ============
+
+def add_to_wishlist(user_id, artwork_id):
+    """Add artwork to customer wishlist (if wishlist table exists)"""
+    # Note: This would require a wishlist table in the database
+    # For now, we'll skip this feature as it's not in the current schema
+    pass
+
+def get_customer_dashboard_data(user_id):
+    """Get data for customer dashboard"""
+    cur = mysql.connection.cursor()
+    
+    # Recent orders
+    cur.execute("""
+        SELECT * FROM orders 
+        WHERE user_id = %s 
+        ORDER BY created_at DESC 
+        LIMIT 5
+    """, (user_id,))
+    recent_orders = cur.fetchall()
+    
+    # Total orders
+    cur.execute("SELECT COUNT(*) as total FROM orders WHERE user_id = %s", (user_id,))
+    total_orders = cur.fetchone()['total']
+    
+    # Total spent
+    cur.execute("""
+        SELECT SUM(total_amount) as total 
+        FROM orders 
+        WHERE user_id = %s AND status != 'cancelled'
+    """, (user_id,))
+    total_spent = cur.fetchone()['total'] or 0
+    
+    cur.close()
+    return {
+        'recent_orders': recent_orders,
+        'total_orders': total_orders,
+        'total_spent': total_spent
+    }

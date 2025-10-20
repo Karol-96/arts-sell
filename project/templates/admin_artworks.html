@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block title %}Artwork Management{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Artwork Management</h2>
+                <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All Artworks</h5>
+                </div>
+                <div class="card-body">
+                    {% if artworks %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Artist</th>
+                                    <th>Medium</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for artwork in artworks %}
+                                <tr>
+                                    <td>{{ artwork.id }}</td>
+                                    <td>
+                                        <img src="{{ url_for('static', filename=artwork.image_url) }}" 
+                                             alt="{{ artwork.title }}" 
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                    </td>
+                                    <td>{{ artwork.title }}</td>
+                                    <td>{{ artwork.artist_name }}</td>
+                                    <td>{{ artwork.medium }}</td>
+                                    <td>${{ "%.2f"|format(artwork.price) }}</td>
+                                    <td>
+                                        <span class="badge {% if artwork.status == 'available' %}bg-success{% elif artwork.status == 'sold' %}bg-danger{% else %}bg-warning{% endif %}">
+                                            {{ artwork.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ artwork.created_at.strftime('%Y-%m-%d') if artwork.created_at else 'N/A' }}</td>
+                                    <td>
+                                        <a href="{{ url_for('main.admin_edit_artwork', artwork_id=artwork.id) }}" 
+                                           class="btn btn-sm btn-outline-primary me-1">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <form method="POST" action="{{ url_for('main.admin_delete_artwork', artwork_id=artwork.id) }}" 
+                                              style="display: inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted">No artworks found.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

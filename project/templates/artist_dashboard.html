@@ -13,22 +13,22 @@
         <div class="col-md-4">
             <div class="stat-card">
                 <h3>Total Artworks</h3>
-                <div class="stat-number">24</div>
+                <div class="stat-number">{{ stats.total_artworks }}</div>
                 <p>Active listings on the platform</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="stat-card">
                 <h3>Total Sales</h3>
-                <div class="stat-number">47</div>
-                <p>Artworks sold this month</p>
+                <div class="stat-number">{{ stats.total_sales }}</div>
+                <p>Orders for your artworks</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="stat-card">
                 <h3>Revenue</h3>
-                <div class="stat-number">$3,240</div>
-                <p>Earnings this month</p>
+                <div class="stat-number">${{ "%.2f"|format(stats.total_revenue) }}</div>
+                <p>Total earnings from sales</p>
             </div>
         </div>
     </div>
@@ -38,19 +38,19 @@
             <div class="action-card">
                 <h5>Upload New Artwork</h5>
                 <p>Add new artworks to your collection and reach more customers.</p>
-                <a href="#" class="btn btn-action">Upload Artwork</a>
+                <a href="{{ url_for('main.artist_upload_artwork') }}" class="btn btn-action">Upload Artwork</a>
             </div>
             
             <div class="action-card">
                 <h5>Manage Inventory</h5>
                 <p>Edit, update, or remove existing artworks from your portfolio.</p>
-                <a href="#" class="btn btn-action">View All Artworks</a>
+                <a href="{{ url_for('main.artist_artworks') }}" class="btn btn-action">View All Artworks</a>
             </div>
             
             <div class="action-card">
-                <h5>Sales History</h5>
-                <p>View detailed reports of your sales and customer interactions.</p>
-                <a href="#" class="btn btn-action">View Reports</a>
+                <h5>My Orders</h5>
+                <p>View orders for your artworks and track sales.</p>
+                <a href="{{ url_for('main.artist_orders') }}" class="btn btn-action">View Orders</a>
             </div>
         </div>
 
