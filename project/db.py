@@ -156,6 +156,16 @@ def remove_from_cart(cart_id, user_id):
     finally:
         cur.close()
 
+def clear_user_cart(user_id: int) -> bool:
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("DELETE FROM cart WHERE user_id = %s", (user_id,))
+        mysql.connection.commit()
+        return True
+    except:
+        mysql.connection.rollback()
+        return False
+
 def get_cart_total(user_id):
     cur = mysql.connection.cursor()
     cur.execute("""

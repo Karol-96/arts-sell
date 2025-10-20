@@ -6,7 +6,7 @@ from project.forms import (RegistrationForm, ArtistRegistrationForm, LoginForm, 
                           ArtworkUploadForm, ArtworkEditForm, UserManagementForm, OrderStatusForm)
 from project.db import (create_user, get_user_by_username, get_user_by_id, update_user_profile, 
                         get_all_artworks, get_artwork_by_id, add_to_cart, 
-                        get_cart_items, remove_from_cart, get_cart_total,
+                        get_cart_items, remove_from_cart, clear_user_cart, get_cart_total,
                         create_order, get_user_orders, get_cart_count,
                         get_all_users, update_user_role, get_all_orders, 
                         update_order_status, get_order_details, get_order_items,
@@ -212,6 +212,15 @@ def remove_cart(cart_id):
         flash('Item removed from cart', 'success')
     else:
         flash('Could not remove item', 'danger')
+    return redirect(url_for('main.basket'))
+
+@main.route('/clear-cart', methods=['POST'])
+@login_required
+def clear_cart():
+    if clear_user_cart(current_user.id):
+        flash('Your cart has been cleared', 'info')
+    else:
+        flash('Cart was already empty', 'warning')
     return redirect(url_for('main.basket'))
 
 @main.route('/checkout')

@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 
-{% block title %}Lease Cart{% endblock %}
+{% block title %}Basket{% endblock %}
 
 {% block main %}
 <div class="dashboard-container">
     <div class="dashboard-header">
-        <h1>Lease Cart</h1>
+        <h1>Your Cart</h1>
         <p>Review your selected artworks for monthly lease before proceeding to checkout.</p>
     </div>
 
@@ -37,6 +37,9 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{{ url_for('main.artworks') }}" class="btn btn-outline-secondary">Continue Browsing</a>
+                    <form method="POST" action="{{ url_for('main.clear_cart') }}">
+                        <button type="submit" class="btn btn-outline-danger btn-md"><i class="fa fa-trash me-2"></i>Clear All</button>
+                    </form>
                 </div>
             </div>
         </div>
