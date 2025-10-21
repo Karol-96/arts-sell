@@ -116,8 +116,7 @@ def add_to_cart(user_id, artwork_id):
         existing = cur.fetchone()
         
         if existing:
-            cur.execute("UPDATE cart SET quantity = quantity + 1 WHERE user_id = %s AND artwork_id = %s",
-                       (user_id, artwork_id))
+            return False
         else:
             cur.execute("INSERT INTO cart (user_id, artwork_id) VALUES (%s, %s)", (user_id, artwork_id))
         mysql.connection.commit()

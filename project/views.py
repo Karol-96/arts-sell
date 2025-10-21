@@ -185,13 +185,11 @@ def add_cart(artwork_id):
     if add_to_cart(current_user.id, artwork_id):
         flash(f'"{artwork["title"]}" added to cart!', 'success')
     else:
-        flash('Failed to add item to cart', 'danger')
-    
-    referrer = request.referrer
-    if referrer and referrer.endswith(f'/artwork/{artwork_id}'):
-        return redirect(url_for('main.artwork_detail', artwork_id=artwork_id))
-    else:
-        return redirect(request.referrer or url_for('main.artworks'))
+        if artwork and artwork["status"] != 'available':
+            flash(f'Error: "{artwork["title"]}" is not available for rent', 'danger')
+        else:
+            flash('Artwork is already in your cart', 'danger')
+    return redirect(request.referrer or url_for('main.artworks'))
 
 @main.route('/basket')
 @login_required
