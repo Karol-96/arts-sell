@@ -35,7 +35,6 @@ class User:
         return check_password_hash(self.password_hash, password)
 
 @dataclass
-@dataclass
 class Artist:
     user_id: int  # References users.id
     firstname: str
@@ -86,6 +85,7 @@ class Artwork:
     image_url: Optional[str] = None
     description: Optional[str] = None
     created_at: Optional[datetime] = None
+    artist_id: Optional[int] = None
     
     @property
     def dimensions(self):

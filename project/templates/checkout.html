@@ -108,13 +108,16 @@
             <div class="col-lg-4">
                 <div class="action-card">
                     <h5 class="mb-4">Order Summary</h5>
-
-                    {% for item in items %}
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="small">{{ item.title }}</span>
-                        <span class="small">${{ "%.2f"|format(item.price) }}</span>
-                    </div>
-                    {% endfor %}
+                    <ul>
+                        {% for item in items %}
+                        <li>
+                            <div class="d-flex justify-content-between mb-2 gap-3">
+                                <span class="small">{{ item.title }}</span>
+                                <span class="small">${{ "%.2f"|format(item.price) }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
 
                     <hr>
 
@@ -150,16 +153,6 @@
                             </svg>
                             Secure SSL Encrypted Payment
                         </small>
-                    </div>
-                </div>
-
-                <div class="action-card mt-3">
-                    <p class="small text-muted mb-2">We accept:</p>
-                    <div class="d-flex gap-2">
-                        <span class="badge bg-secondary">Visa</span>
-                        <span class="badge bg-secondary">Mastercard</span>
-                        <span class="badge bg-secondary">Amex</span>
-                        <span class="badge bg-secondary">PayPal</span>
                     </div>
                 </div>
             </div>

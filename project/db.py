@@ -1,5 +1,5 @@
 from project import mysql
-from project.models import User, Artist, Artwork, Cart, Order, OrderItem
+from project.models import User, Artist, Artwork, Cart, Order, OrderItem, PaymentInfo, RentedArtwork
 from werkzeug.security import generate_password_hash
 
 # Authentication and User Management Functions
@@ -83,18 +83,78 @@ def update_user_profile(user_id, form):
         cur.close()
 
 # Artwork and Cart Management Functions
-def get_all_artworks():
+def _row_to_artwork(row):
+    if not row:
+        return None
+    return Artwork(
+        id=row['id'], title=row['title'], artist_name=row['artist_name'], 
+        price=float(row['price']), status=row['status'], height=float(row['height']), 
+        width=float(row['width']), size_category=row['size_category'], 
+        category=row['category'], medium=row['medium'], art_origin=row['art_origin'], 
+        year_of_publish=row['year_of_publish'], image_url=row['image_url'], 
+        description=row['description'], currency=row['currency'], created_at=row['created_at'],
+        artist_id=row.get('artist_id')
+    )
+
+def _row_to_cart(row):
+    if not row:
+        return None
+    return Cart(
+        id=row['id'], user_id=row['user_id'], artwork_id=row['artwork_id'],
+        quantity=row.get('quantity', 1), added_at=row.get('added_at')
+    )
+
+def _row_to_order(row):
+    if not row:
+        return None
+    return Order(
+        id=row['id'], user_id=row['user_id'], total_amount=float(row['total_amount']),
+        shipping_cost=float(row.get('shipping_cost', 45.00)), tax=float(row.get('tax', 0.0)),
+        status=row.get('status', 'pending'), shipping_address=row.get('shipping_address'),
+        payment_method=row.get('payment_method'), created_at=row.get('created_at')
+    )
+
+def _row_to_order_item(row):
+    if not row:
+        return None
+    return OrderItem(
+        id=row['id'], order_id=row['order_id'], artwork_id=row['artwork_id'],
+        price=float(row['price']), quantity=row.get('quantity', 1)
+    )
+
+def get_all_artworks(sort_by=None):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    
+    # Base query
+    base_query = """
         SELECT a.*, CONCAT(a.height, ' x ', a.width, ' cm') as dimensions,
                CONCAT(u.firstname, ' ', u.lastname) as artist_name
         FROM artworks a
         JOIN users u ON a.artist_id = u.id
-        ORDER BY a.created_at DESC
-    """)
-    artworks = cur.fetchall()
+    """
+    
+    # Add ORDER BY clause based on sort_by parameter
+    if sort_by == 'price_low':
+        query = base_query + " ORDER BY a.price ASC"
+    elif sort_by == 'price_high':
+        query = base_query + " ORDER BY a.price DESC"
+    elif sort_by == 'title_asc':
+        query = base_query + " ORDER BY a.title ASC"
+    elif sort_by == 'title_desc':
+        query = base_query + " ORDER BY a.title DESC"
+    elif sort_by == 'artist_asc':
+        query = base_query + " ORDER BY CONCAT(u.firstname, ' ', u.lastname) ASC"
+    elif sort_by == 'artist_desc':
+        query = base_query + " ORDER BY CONCAT(u.firstname, ' ', u.lastname) DESC"
+    elif sort_by == 'oldest':
+        query = base_query + " ORDER BY a.id ASC"
+    else:  # Default to newest (including 'newest' and 'featured')
+        query = base_query + " ORDER BY a.id DESC"
+    
+    cur.execute(query)
+    rows = cur.fetchall()
     cur.close()
-    return artworks
+    return [_row_to_artwork(row) for row in rows]
 
 def get_artwork_by_id(artwork_id):
     cur = mysql.connection.cursor()
@@ -105,9 +165,9 @@ def get_artwork_by_id(artwork_id):
         JOIN users u ON a.artist_id = u.id
         WHERE a.id = %s
     """, (artwork_id,))
-    artwork = cur.fetchone()
+    row = cur.fetchone()
     cur.close()
-    return artwork
+    return _row_to_artwork(row)
 
 def add_to_cart(user_id, artwork_id):
     cur = mysql.connection.cursor()
@@ -220,9 +280,9 @@ def get_user_orders(user_id):
         WHERE user_id = %s 
         ORDER BY created_at DESC
     """, (user_id,))
-    orders = cur.fetchall()
+    rows = cur.fetchall()
     cur.close()
-    return orders
+    return [_row_to_order(row) for row in rows]
 
 def get_cart_count(user_id):
     cur = mysql.connection.cursor()
@@ -407,12 +467,15 @@ def get_artist_artworks(user_id):
     cur = mysql.connection.cursor()
     try:
         cur.execute("""
-            SELECT *, CONCAT(height, ' x ', width, ' cm') as dimensions 
-            FROM artworks WHERE artist_id = %s ORDER BY created_at DESC
+            SELECT a.*, CONCAT(a.height, ' x ', a.width, ' cm') as dimensions,
+                   CONCAT(u.firstname, ' ', u.lastname) as artist_name
+            FROM artworks a
+            JOIN users u ON a.artist_id = u.id
+            WHERE a.artist_id = %s ORDER BY a.created_at DESC
         """, (user_id,))
-        artworks = cur.fetchall()
+        rows = cur.fetchall()
         cur.close()
-        return artworks
+        return [_row_to_artwork(row) for row in rows]
     except Exception as e:
         cur.close()
         return []
