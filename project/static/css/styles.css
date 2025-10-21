@@ -200,7 +200,6 @@ main {
 
 /* Hero Stats Section */
 .hero-stats-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -324,7 +323,7 @@ main {
 /* Why Choose Section */
 .why-choose-section {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    padding: 80px 0;
+    padding: 80px 30px;
 }
 
 .feature-list {
@@ -1390,19 +1389,10 @@ main {
 }
 
 .intro-container {
-    padding: 60px 20px;
-    background: #ffffff;
+    padding: 40px 30px;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    margin: 40px auto;
-    max-width: 1400px;
-}
-
-.intro-container h3 {
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 45px;
-    font-size: 2em;
+    margin: 30px auto;
+    max-width: 90vw;
 }
 
 .card {
@@ -2217,14 +2207,9 @@ footer p {
     font-size: 1.2em;
 }
 
-.profile-form .form-floating {
-    margin-bottom: 20px;
-}
-
 .profile-form .form-floating .form-control {
     border: 2px solid #e9ecef;
     border-radius: 8px;
-    padding: 1rem 0.75rem;
     font-size: 1rem;
     transition: all 0.3s ease;
     line-height: 1.5;
@@ -2250,23 +2235,6 @@ footer p {
     overflow-y: auto;
 }
 
-.profile-form .form-floating textarea.form-control:focus {
-    min-height: 100px;
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-}
-
-/* Fix for floating label positioning with textarea */
-.profile-form .form-floating textarea.form-control:not(:placeholder-shown) {
-    padding-top: 1.625rem;
-    padding-bottom: 0.625rem;
-}
-
-.profile-form .form-floating textarea.form-control:focus {
-    padding-top: 1.625rem;
-    padding-bottom: 0.625rem;
-}
-
 .profile-form .form-floating label {
     color: #6c757d;
     font-weight: 500;
@@ -2276,42 +2244,6 @@ footer p {
     text-align: center;
     padding-top: 30px;
     border-top: 2px solid #f8f9fa;
-}
-
-.settings-section {
-    padding: 20px 0;
-}
-
-.settings-grid {
-    display: grid;
-    gap: 20px;
-}
-
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-}
-
-.setting-info h6 {
-    color: #2c3e50;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.setting-info p {
-    color: #6c757d;
-    margin: 0;
-    font-size: 0.95em;
-}
-
-.setting-value .badge {
-    font-size: 0.8em;
-    padding: 8px 12px;
 }
 
 @media (max-width: 768px) {

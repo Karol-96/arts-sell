@@ -20,10 +20,10 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     tiles = [
-        {'title': 'Abstract Art', 'img': 'img/feature-slide-1.png', 'url': url_for('main.artworks'), 'link_title': 'Explore Collection'},
-        {'title': 'Landscape', 'img': 'img/feature-slide-2.png', 'url': url_for('main.artworks'), 'link_title': 'View Gallery'},
-        {'title': 'Modern Art', 'img': 'img/feature-slide-3.png', 'url': url_for('main.artworks'), 'link_title': 'Discover More'},
-        {'title': 'Portrait', 'img': 'img/feature-slide-1.png', 'url': url_for('main.artworks'), 'link_title': 'Browse Artworks'}
+        {'title': 'Abstract Art', 'img': 'img/10.jpg', 'url': url_for('main.artworks'), 'link_title': 'Explore Collection'},
+        {'title': 'Landscape', 'img': 'img/12.jpg', 'url': url_for('main.artworks'), 'link_title': 'View Gallery'},
+        {'title': 'Modern Art', 'img': 'img/14.jpg', 'url': url_for('main.artworks'), 'link_title': 'Discover More'},
+        {'title': 'Portrait', 'img': 'img/1.jpg', 'url': url_for('main.artworks'), 'link_title': 'Browse Artworks'}
     ]
     return render_template('index.html', tiles=tiles)
 

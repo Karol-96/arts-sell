@@ -138,17 +138,9 @@ def get_all_artworks(sort_by=None):
         query = base_query + " ORDER BY a.price ASC"
     elif sort_by == 'price_high':
         query = base_query + " ORDER BY a.price DESC"
-    elif sort_by == 'title_asc':
-        query = base_query + " ORDER BY a.title ASC"
-    elif sort_by == 'title_desc':
-        query = base_query + " ORDER BY a.title DESC"
-    elif sort_by == 'artist_asc':
-        query = base_query + " ORDER BY CONCAT(u.firstname, ' ', u.lastname) ASC"
-    elif sort_by == 'artist_desc':
-        query = base_query + " ORDER BY CONCAT(u.firstname, ' ', u.lastname) DESC"
     elif sort_by == 'oldest':
         query = base_query + " ORDER BY a.id ASC"
-    else:  # Default to newest (including 'newest' and 'featured')
+    else:
         query = base_query + " ORDER BY a.id DESC"
     
     cur.execute(query)
