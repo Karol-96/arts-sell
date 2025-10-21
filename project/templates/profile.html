@@ -17,7 +17,7 @@
                         <span class="avatar-initials">{{ current_user.firstname[0] }}{{ current_user.lastname[0] }}</span>
                     </div>
                     <h4 class="profile-name">{{ current_user.firstname }} {{ current_user.lastname }}</h4>
-                    <p class="profile-role">{{ current_user.role|title }}</p>
+                    <p class="profile-role">{{ current_user.role | title }}</p>
                 </div>
                 
                 <div class="profile-stats">
@@ -26,7 +26,7 @@
                         <span class="stat-label">Items in Cart</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">{{ get_user_orders(current_user.id)|length }}</span>
+                        <span class="stat-number">{{ get_user_orders(current_user.id) | length }}</span>
                         <span class="stat-label">Total Orders</span>
                     </div>
                 </div>
@@ -66,9 +66,7 @@
                         <div class="tab-pane fade show active" id="personal-info">
                             <form method="POST" class="profile-form">
                                 {{ form.hidden_tag() }}
-                                
                                 <div class="form-section">
-                                    <h5 class="section-title">Basic Information</h5>
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
@@ -90,9 +88,7 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-section">
-                                    <h5 class="section-title">Contact Information</h5>
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
@@ -114,9 +110,7 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-section">
-                                    <h5 class="section-title">Address Information</h5>
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             {{ form.address(class="form-control", rows="3", placeholder="Enter your address") }}
@@ -165,51 +159,23 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-section">
-                                    <h5 class="section-title">About You</h5>
                                     <div class="form-floating">
-                                        {{ form.bio(class="form-control", rows="4", placeholder="Tell us about yourself") }}
+                                        {{ form.bio(class="form-control", rows="5", placeholder="Tell us about yourself") }}
                                         {{ form.bio.label(class="form-label") }}
                                         {% for error in form.bio.errors %}
                                             <div class="invalid-feedback">{{ error }}</div>
                                         {% endfor %}
                                     </div>
                                 </div>
-
                                 <div class="form-actions">
-                                    {{ form.submit(class="btn btn-action") }}
+                                    {{ form.submit(class="btn btn-action w-100") }}
                                 </div>
                             </form>
                         </div>
 
                         <div class="tab-pane fade" id="account-settings">
-                            <div class="settings-section">
-                                <h5 class="section-title">Account Information</h5>
-                                <div class="settings-grid">
-                                    <div class="setting-item">
-                                        <div class="setting-info">
-                                            <h6>Account Type</h6>
-                                            <p>{{ current_user.role|title }}</p>
-                                        </div>
-                                        <div class="setting-value">
-                                            <span class="badge bg-primary">{{ current_user.role|title }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-info">
-                                            <h6>Username</h6>
-                                            <p>{{ current_user.username }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="setting-item">
-                                        <div class="setting-info">
-                                            <h6>Member Since</h6>
-                                            <p>October 2025</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--This section is just a placeholder as we do not use JS to implement tabs-->
                         </div>
                     </div>
                 </div>

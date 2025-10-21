@@ -200,7 +200,6 @@ main {
 
 /* Hero Stats Section */
 .hero-stats-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -324,7 +323,7 @@ main {
 /* Why Choose Section */
 .why-choose-section {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    padding: 80px 0;
+    padding: 80px 30px;
 }
 
 .feature-list {
@@ -457,7 +456,6 @@ main {
 /* Enhanced Artworks Page Styling */
 .artworks-container {
     padding: 40px 0;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     min-height: 100vh;
 }
 
@@ -466,12 +464,7 @@ main {
 }
 
 .search-filter-section {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
     margin-bottom: 40px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    border: 1px solid #e9ecef;
 }
 
 .search-form .input-group {
@@ -508,7 +501,7 @@ main {
 .sort-select {
     border: 2px solid #e9ecef;
     border-radius: 10px;
-    padding: 12px 15px;
+    padding: 20px;
     font-weight: 500;
     transition: all 0.3s ease;
 }
@@ -652,34 +645,64 @@ main {
     letter-spacing: 1px;
 }
 
-.artwork-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 2;
-}
-
 .artwork-content {
-    padding: 25px;
+    padding: 20px;
 }
 
-.artwork-title {
+/* Updated card structure styles */
+.artwork-card .card-body {
+    padding: 15px;
+}
+
+.artwork-card .card-footer {
+    padding: 15px;
+    margin-top: 10px;
+    border-top: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+}
+
+.artwork-card .pricing {
+    display: flex;
+    flex-direction: column;
+}
+
+.artwork-card .pricing p {
+    font-size: 1.1rem;
+}
+
+.artwork-card .pricing small {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   ARTWORK GALLERY STYLES - CONSOLIDATED
+   ============================================ */
+
+/* Artwork card title in gallery */
+.artwork-card .artwork-title,
+.artwork-card .card-title {
     color: #2c3e50;
     font-weight: 600;
     margin-bottom: 8px;
     font-size: 1.1rem;
 }
 
-.artwork-artist {
+/* Artwork artist name in cards */
+.artwork-artist,
+.artwork-card .card-text {
     color: #6c757d;
     font-size: 0.9rem;
     margin-bottom: 5px;
+    font-weight: 500;
 }
 
+/* Artwork details text */
 .artwork-details {
     color: #6c757d;
     font-size: 0.85rem;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .artwork-footer {
@@ -692,9 +715,11 @@ main {
     flex-direction: column;
 }
 
-.artwork-price {
+/* Consolidated artwork pricing styles */
+.artwork-price,
+.artwork-card .pricing p {
     color: #667eea;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 2px;
 }
@@ -754,19 +779,19 @@ main {
         padding: 20px;
     }
     
-.artwork-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-    
+    .artwork-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+        
     .artwork-footer {
         flex-direction: column;
         gap: 15px;
         align-items: stretch;
     }
-    
+
     .btn-add-to-cart {
         width: 100%;
     }
@@ -780,10 +805,10 @@ main {
 }
 
 .breadcrumb-section {
-    background: white;
     padding: 15px 0;
     border-bottom: 1px solid #e9ecef;
     margin-bottom: 30px;
+    font-size: 1.2rem;
 }
 
 .breadcrumb {
@@ -821,7 +846,7 @@ main {
 
 .main-artwork-image {
     width: 100%;
-    height: 500px;
+    height: auto;
     object-fit: cover;
     transition: all 0.3s ease;
 }
@@ -896,24 +921,25 @@ main {
     border: 1px solid #f0f0f0;
 }
 
-.artwork-title {
+/* ============================================
+   ARTWORK DETAIL PAGE STYLES
+   ============================================ */
+
+/* Artwork detail page main title */
+.artwork-detail-container .artwork-title {
     color: #2c3e50;
-    font-size: 2.5rem;
-    font-weight: 700;
     margin-bottom: 10px;
     line-height: 1.2;
 }
 
 .artist-name {
     color: #6c757d;
-    font-size: 1.1rem;
     margin-bottom: 15px;
 }
 
 .artist-link {
     color: #667eea;
     text-decoration: none;
-    font-weight: 600;
 }
 
 .artist-link:hover {
@@ -935,7 +961,6 @@ main {
 
 .rating-text {
     color: #6c757d;
-    font-size: 0.9rem;
 }
 
 .pricing-section {
@@ -1339,7 +1364,7 @@ main {
         padding: 25px;
     }
     
-    .artwork-title {
+    .artwork-detail-container .artwork-title {
         font-size: 2rem;
     }
     
@@ -1364,19 +1389,10 @@ main {
 }
 
 .intro-container {
-    padding: 60px 20px;
-    background: #ffffff;
+    padding: 40px 30px;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    margin: 40px auto;
-    max-width: 1400px;
-}
-
-.intro-container h3 {
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 45px;
-    font-size: 2em;
+    margin: 30px auto;
+    max-width: 90vw;
 }
 
 .card {
@@ -1681,32 +1697,9 @@ footer p {
 }
 
 /* Professional Artwork Card Enhancements */
-.artwork-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 8px;
-    line-height: 1.3;
-}
+/* This is now covered by the consolidated .artwork-card .artwork-title rule above */
 
-.artwork-artist {
-    font-size: 0.9rem;
-    color: #6c757d;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.artwork-details {
-    font-size: 0.85rem;
-    color: #6c757d;
-    margin-bottom: 15px;
-}
-
-.artwork-price {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #28a745;
-}
+/* Duplicates removed and consolidated above */
 
 .price-label {
     font-size: 0.75rem;
@@ -1727,19 +1720,6 @@ footer p {
     padding: 6px 12px;
     border-radius: 20px;
     font-weight: 500;
-}
-
-.btn-add-to-cart {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-add-to-cart:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .artwork-item {
@@ -1914,7 +1894,7 @@ footer p {
 .form-select {
     border-radius: 8px;
     border: 1px solid #dee2e6;
-    padding: 10px;
+    padding: 10px 36px 10px 10px;
     transition: all 0.3s ease;
 }
 
@@ -2080,9 +2060,7 @@ footer p {
 
 .empty-basket {
     padding: 60px 40px;
-    background: #f8f9fa;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .empty-basket h3 {
@@ -2229,14 +2207,9 @@ footer p {
     font-size: 1.2em;
 }
 
-.profile-form .form-floating {
-    margin-bottom: 20px;
-}
-
 .profile-form .form-floating .form-control {
     border: 2px solid #e9ecef;
     border-radius: 8px;
-    padding: 1rem 0.75rem;
     font-size: 1rem;
     transition: all 0.3s ease;
     line-height: 1.5;
@@ -2262,23 +2235,6 @@ footer p {
     overflow-y: auto;
 }
 
-.profile-form .form-floating textarea.form-control:focus {
-    min-height: 100px;
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-}
-
-/* Fix for floating label positioning with textarea */
-.profile-form .form-floating textarea.form-control:not(:placeholder-shown) {
-    padding-top: 1.625rem;
-    padding-bottom: 0.625rem;
-}
-
-.profile-form .form-floating textarea.form-control:focus {
-    padding-top: 1.625rem;
-    padding-bottom: 0.625rem;
-}
-
 .profile-form .form-floating label {
     color: #6c757d;
     font-weight: 500;
@@ -2288,42 +2244,6 @@ footer p {
     text-align: center;
     padding-top: 30px;
     border-top: 2px solid #f8f9fa;
-}
-
-.settings-section {
-    padding: 20px 0;
-}
-
-.settings-grid {
-    display: grid;
-    gap: 20px;
-}
-
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-}
-
-.setting-info h6 {
-    color: #2c3e50;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.setting-info p {
-    color: #6c757d;
-    margin: 0;
-    font-size: 0.95em;
-}
-
-.setting-value .badge {
-    font-size: 0.8em;
-    padding: 8px 12px;
 }
 
 @media (max-width: 768px) {

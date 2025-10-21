@@ -76,19 +76,19 @@
     <!--Feature Introduction-->
     <div class="intro-container">
         <div class="text-center mb-5">
-            <h2 class="display-4 fw-bold text-dark mb-3">Experience the Joy of Living with Original Art</h2>
+            <h2 class="fw-bold text-dark mb-3">Experience the Joy of Living with Original Art</h2>
             <p class="lead text-muted mb-4">Transform your space with curated masterpieces from world-renowned artists. Lease authentic artworks monthly and refresh your collection whenever you desire.</p>
         </div>
         
         <div class="row justify-content-center g-4">
             {% for tile in tiles %}
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-md-6 col-lg-3">
                     <div class="feature-card">
                         <a href="{{ tile.url }}" class="feature-link">
                             <div class="feature-image-container">
                                 <img src="{{ url_for('static', filename=tile.img) }}" alt="{{ tile.title }}" class="feature-image">
                                 <div class="feature-overlay">
-                                    <span class="feature-icon">→</span>
+                                    <span class="feature-icon"><i class="fa fa-arrow-right"></i></span>
                                 </div>
                             </div>
                         </a>
@@ -159,7 +159,7 @@
     </div>
 
     <!-- Call to Action Section -->
-    <div class="cta-section">
+    <div class="cta-section mt-4">
         <div class="container text-center">
             <h2 class="display-5 fw-bold text-white mb-4">Ready to Transform Your Space?</h2>
             <p class="lead text-white-50 mb-4">Join thousands of art lovers who have discovered the joy of living with original art</p>

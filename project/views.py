@@ -4,9 +4,9 @@ from werkzeug.utils import secure_filename
 import os
 from project.forms import (RegistrationForm, ArtistRegistrationForm, LoginForm, ProfileForm,
                           ArtworkUploadForm, ArtworkEditForm, UserManagementForm, OrderStatusForm)
-from project.db import (create_user, get_user_by_username, update_user_profile, 
+from project.db import (create_user, get_user_by_username, get_user_by_id, update_user_profile, 
                         get_all_artworks, get_artwork_by_id, add_to_cart, 
-                        get_cart_items, remove_from_cart, get_cart_total,
+                        get_cart_items, remove_from_cart, clear_user_cart, get_cart_total,
                         create_order, get_user_orders, get_cart_count,
                         get_all_users, update_user_role, get_all_orders, 
                         update_order_status, get_order_details, get_order_items,
@@ -20,10 +20,10 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     tiles = [
-        {'title': 'Abstract Art', 'img': 'img/feature-slide-1.png', 'url': url_for('main.artworks'), 'link_title': 'Explore Collection'},
-        {'title': 'Landscape', 'img': 'img/feature-slide-2.png', 'url': url_for('main.artworks'), 'link_title': 'View Gallery'},
-        {'title': 'Modern Art', 'img': 'img/feature-slide-3.png', 'url': url_for('main.artworks'), 'link_title': 'Discover More'},
-        {'title': 'Portrait', 'img': 'img/feature-slide-1.png', 'url': url_for('main.artworks'), 'link_title': 'Browse Artworks'}
+        {'title': 'Abstract Art', 'img': 'img/10.jpg', 'url': url_for('main.artworks'), 'link_title': 'Explore Collection'},
+        {'title': 'Landscape', 'img': 'img/12.jpg', 'url': url_for('main.artworks'), 'link_title': 'View Gallery'},
+        {'title': 'Modern Art', 'img': 'img/14.jpg', 'url': url_for('main.artworks'), 'link_title': 'Discover More'},
+        {'title': 'Portrait', 'img': 'img/1.jpg', 'url': url_for('main.artworks'), 'link_title': 'Browse Artworks'}
     ]
     return render_template('index.html', tiles=tiles)
 
@@ -79,7 +79,7 @@ def login():
             elif user.role == 'artist':
                 return redirect(url_for('main.artist_dashboard'))
             elif user.role == 'customer':
-                return redirect(url_for('main.customer_dashboard'))
+                return redirect(url_for('main.profile'))
             else:
                 return redirect(url_for('main.index'))
         else:
@@ -102,8 +102,6 @@ def profile():
         flash('Profile updated successfully', 'success')
         return redirect(url_for('main.profile'))
     return render_template('profile.html', form=form, title='Profile')
-    
-
 
 @main.route('/artworks')
 def artworks():
@@ -114,49 +112,38 @@ def artworks():
     price_min = request.args.get('price_min', '')
     price_max = request.args.get('price_max', '')
     
-    # Get all artworks
-    artworks_list = get_all_artworks()
+    # Get all artworks with sorting applied at database level
+    artworks_list = get_all_artworks(sort_by)
     
     # Apply search filter
     if query:
         artworks_list = [artwork for artwork in artworks_list 
-                        if query.lower() in artwork['title'].lower() 
-                        or query.lower() in artwork['artist_name'].lower()
-                        or query.lower() in artwork['medium'].lower()]
+                        if query.lower() in artwork.title.lower() 
+                        or query.lower() in artwork.artist_name.lower()
+                        or (artwork.medium and query.lower() in artwork.medium.lower())]
     
     # Apply medium filter
     if medium_filter:
         artworks_list = [artwork for artwork in artworks_list 
-                        if medium_filter.lower() in artwork['medium'].lower()]
+                        if artwork.medium and medium_filter.lower() in artwork.medium.lower()]
     
     # Apply price filters
     if price_min:
         try:
             min_price = float(price_min)
-            artworks_list = [artwork for artwork in artworks_list if artwork['price'] >= min_price]
+            artworks_list = [artwork for artwork in artworks_list if artwork.price >= min_price]
         except ValueError:
             pass
     
     if price_max:
         try:
             max_price = float(price_max)
-            artworks_list = [artwork for artwork in artworks_list if artwork['price'] <= max_price]
+            artworks_list = [artwork for artwork in artworks_list if artwork.price <= max_price]
         except ValueError:
             pass
     
-    # Apply sorting
-    if sort_by == 'price_low':
-        artworks_list.sort(key=lambda x: x['price'])
-    elif sort_by == 'price_high':
-        artworks_list.sort(key=lambda x: x['price'], reverse=True)
-    elif sort_by == 'newest':
-        artworks_list.sort(key=lambda x: x.get('created_at', ''), reverse=True)
-    elif sort_by == 'popular':
-        # For now, just sort by price as a proxy for popularity
-        artworks_list.sort(key=lambda x: x['price'], reverse=True)
-    
     # Get unique mediums for filter dropdown
-    mediums = list(set([artwork['medium'] for artwork in get_all_artworks() if artwork['medium']]))
+    mediums = list(set([artwork.medium for artwork in get_all_artworks() if artwork.medium]))
     
     return render_template('artworks.html', 
                          title='Browse Artworks', 
@@ -174,7 +161,7 @@ def artwork_detail(artwork_id):
     if not artwork:
         flash('Artwork not found', 'danger')
         return redirect(url_for('main.artworks'))
-    return render_template('artwork_detail.html', title=artwork['title'], artwork=artwork)
+    return render_template('artwork_detail.html', title=artwork.title, artwork=artwork)
 
 @main.route('/add-to-cart/<int:artwork_id>', methods=['POST'])
 @login_required
@@ -185,15 +172,13 @@ def add_cart(artwork_id):
         return redirect(url_for('main.artworks'))
     
     if add_to_cart(current_user.id, artwork_id):
-        flash(f'"{artwork["title"]}" added to cart!', 'success')
+        flash(f'"{artwork.title}" added to cart!', 'success')
     else:
-        flash('Failed to add item to cart', 'danger')
-    
-    referrer = request.referrer
-    if referrer and referrer.endswith(f'/artwork/{artwork_id}'):
-        return redirect(url_for('main.artwork_detail', artwork_id=artwork_id))
-    else:
-        return redirect(request.referrer or url_for('main.artworks'))
+        if artwork and artwork.status != 'available':
+            flash(f'Error: "{artwork.title}" is not available for rent', 'danger')
+        else:
+            flash('Artwork is already in your cart', 'danger')
+    return redirect(request.referrer or url_for('main.artworks'))
 
 @main.route('/basket')
 @login_required
@@ -214,6 +199,15 @@ def remove_cart(cart_id):
         flash('Item removed from cart', 'success')
     else:
         flash('Could not remove item', 'danger')
+    return redirect(url_for('main.basket'))
+
+@main.route('/clear-cart', methods=['POST'])
+@login_required
+def clear_cart():
+    if clear_user_cart(current_user.id):
+        flash('Your cart has been cleared', 'info')
+    else:
+        flash('Cart was already empty', 'warning')
     return redirect(url_for('main.basket'))
 
 @main.route('/checkout')
@@ -326,7 +320,7 @@ def admin_update_order_status(order_id):
 @main.route('/admin/artworks')
 @admin_required
 def admin_artworks():
-    artworks = get_all_artworks()
+    artworks = get_all_artworks('newest')  # Default sort for admin
     return render_template('admin_artworks.html', title='Artwork Management', artworks=artworks)
 
 @main.route('/admin/artworks/edit/<int:artwork_id>', methods=['GET', 'POST'])
@@ -402,7 +396,7 @@ def artist_artworks():
 @artist_required
 def artist_edit_artwork(artwork_id):
     artwork = get_artwork_by_id(artwork_id)
-    if not artwork or artwork['artist_id'] != current_user.id:
+    if not artwork or artwork.artist_id != current_user.id:
         flash('Artwork not found or access denied', 'danger')
         return redirect(url_for('main.artist_artworks'))
     
