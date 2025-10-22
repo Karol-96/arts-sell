@@ -10,10 +10,10 @@
                 <h2>My Artworks</h2>
                 <div>
                     <a href="{{ url_for('main.artist_upload_artwork') }}" class="btn btn-primary me-2">
-                        <i class="fas fa-plus"></i> Upload New Artwork
+                        <i class="fa fa-plus"></i> Upload New Artwork
                     </a>
                     <a href="{{ url_for('main.artist_dashboard') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        <i class="fa fa-arrow-left"></i> Back to Dashboard
                     </a>
                 </div>
             </div>
@@ -62,12 +62,12 @@
                                         <div class="btn-group" role="group">
                                             <a href="{{ url_for('main.artist_edit_artwork', artwork_id=artwork.id) }}" 
                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-edit"></i> Edit
+                                                <i class="fa fa-edit"></i> Edit
                                             </a>
                                             <form method="POST" action="{{ url_for('main.artist_delete_artwork', artwork_id=artwork.id) }}" 
                                                   style="display: inline;">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fa fa-trash"></i> Delete
                                                 </button>
                                             </form>
                                         </div>
@@ -79,11 +79,11 @@
                     </div>
                     {% else %}
                     <div class="text-center py-5">
-                        <i class="fas fa-palette fa-3x text-muted mb-3"></i>
+                        <i class="fa fa-palette fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">No artworks uploaded yet</h5>
                         <p class="text-muted">Start building your portfolio by uploading your first artwork.</p>
                         <a href="{{ url_for('main.artist_upload_artwork') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Upload Your First Artwork
+                            <i class="fa fa-plus"></i> Upload Your First Artwork
                         </a>
                     </div>
                     {% endif %}

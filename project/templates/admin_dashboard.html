@@ -10,28 +10,21 @@
     </div>
     
     <div class="row g-4 mb-4">
-        <div class="col-md-3">
+        <div class="col-lg-4">
             <div class="stat-card">
                 <h3>Total Users</h3>
                 <div class="stat-number">{{ stats.total_users }}</div>
                 <p>Registered platform users</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <h3>Active Artists</h3>
-                <div class="stat-number">{{ stats.total_artists }}</div>
-                <p>Content creators on platform</p>
-            </div>
-        </div>
-        <div class="col-md-3">
+        <div class="col-lg-4">
             <div class="stat-card">
                 <h3>Total Artworks</h3>
                 <div class="stat-number">{{ stats.total_artworks }}</div>
                 <p>Listed artworks available</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-4">
             <div class="stat-card">
                 <h3>Revenue</h3>
                 <div class="stat-number">${{ "%.2f"|format(stats.total_revenue) }}</div>
@@ -41,90 +34,25 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-lg-8">
-            <div class="table-container">
-                <h5 class="mb-3">Recent User Activity</h5>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>John Smith</td>
-                            <td>Customer</td>
-                            <td>Purchased artwork</td>
-                            <td>Oct 12, 2025</td>
-                            <td><span class="badge bg-success">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>Emma Wilson</td>
-                            <td>Artist</td>
-                            <td>Uploaded new artwork</td>
-                            <td>Oct 12, 2025</td>
-                            <td><span class="badge bg-primary">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td>Michael Brown</td>
-                            <td>Customer</td>
-                            <td>Account created</td>
-                            <td>Oct 11, 2025</td>
-                            <td><span class="badge bg-info">New</span></td>
-                        </tr>
-                        <tr>
-                            <td>Sarah Davis</td>
-                            <td>Artist</td>
-                            <td>Profile updated</td>
-                            <td>Oct 11, 2025</td>
-                            <td><span class="badge bg-primary">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td>James Johnson</td>
-                            <td>Customer</td>
-                            <td>Purchased artwork</td>
-                            <td>Oct 10, 2025</td>
-                            <td><span class="badge bg-success">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>Lisa Anderson</td>
-                            <td>Artist</td>
-                            <td>Artwork approved</td>
-                            <td>Oct 10, 2025</td>
-                            <td><span class="badge bg-success">Approved</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <div class="col-lg-4">
             <div class="action-card">
                 <h5>User Management</h5>
                 <p>View and manage all registered users on the platform.</p>
                 <a href="{{ url_for('main.admin_users') }}" class="btn btn-action w-100 mb-2">Manage Users</a>
             </div>
-            
-            <div class="action-card">
-                <h5>Order Management</h5>
-                <p>View and update order statuses across the platform.</p>
-                <a href="{{ url_for('main.admin_orders') }}" class="btn btn-action w-100 mb-2">Manage Orders</a>
-            </div>
-            
+        </div>
+        <div class="col-lg-4">
             <div class="action-card">
                 <h5>Artwork Management</h5>
                 <p>Review and manage all artworks on the platform.</p>
                 <a href="{{ url_for('main.admin_artworks') }}" class="btn btn-action w-100 mb-2">Manage Artworks</a>
             </div>
-            
+        </div>
+        <div class="col-lg-4">
             <div class="action-card">
-                <h5>Browse Artworks</h5>
-                <p>View artworks from the customer perspective.</p>
-                <a href="{{ url_for('main.artworks') }}" class="btn btn-action w-100 mb-2">View Gallery</a>
+                <h5>Order Management</h5>
+                <p>View and update order statuses across the platform.</p>
+                <a href="{{ url_for('main.admin_orders') }}" class="btn btn-action w-100 mb-2">Manage Orders</a>
             </div>
         </div>
     </div>

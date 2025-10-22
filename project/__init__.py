@@ -38,19 +38,8 @@ def create_app():
     def internal_error(e):
         return render_template("500.html"), 500
 
-    # Load session module
+    # Load session module and setup context processor
     from . import session
-    
-    # Context processor for templates / Temporarily commented out
-    @app.context_processor
-    def inject_user():
-        from flask_login import current_user
-        from .db import get_cart_count, get_user_orders
-        cart_count = 0
-        user_orders = []
-        if current_user.is_authenticated:
-            cart_count = get_cart_count(current_user.id)
-            user_orders = get_user_orders(current_user.id)
-        return dict(current_user=current_user, get_cart_count=get_cart_count, get_user_orders=get_user_orders)
+    session.setup_context_processor(app)
 
     return app

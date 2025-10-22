@@ -47,13 +47,25 @@ CREATE TABLE cart (
     FOREIGN KEY (artwork_id) REFERENCES artworks(id)
 );
 
+CREATE TABLE favorites (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    artwork_id INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_artwork (user_id, artwork_id),
+    INDEX idx_user_favorites (user_id),
+    INDEX idx_artwork_favorites (artwork_id)
+);
+
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_amount DECIMAL(10, 2),
     shipping_cost DECIMAL(10,2) DEFAULT 45.00,
     tax DECIMAL(10, 2),
-    status VARCHAR(50) DEFAULT 'pending',
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'success', 'cancelled', 'shipped', 'delivered')),
     shipping_address TEXT,
     payment_method VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -68,6 +80,19 @@ CREATE TABLE order_items (
     quantity INT DEFAULT 1,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE
+);
+
+-- Table to store payment information
+CREATE TABLE payment_info (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    account_name VARCHAR(255),
+    account_number VARCHAR(50),
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    payment_status VARCHAR(20) DEFAULT 'pending' CHECK (payment_status IN ('pending', 'completed', 'failed')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
 -- Table to track artwork rentals

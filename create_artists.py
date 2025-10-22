@@ -15,11 +15,10 @@ def create_artists():
     with app.app_context():
         cur = mysql.connection.cursor()
         
-        # Samples artist users
         artists_data = [
             {
                 'id': 1,
-                'username': 'vincent_monet',
+                'username': 'artist_test_1',
                 'firstname': 'Vincent',
                 'lastname': 'Monet',
                 'email': 'vincent.monet@artsell.com',
@@ -33,7 +32,7 @@ def create_artists():
             },
             {
                 'id': 2,
-                'username': 'marie_rousseau',
+                'username': 'artist_test_2',
                 'firstname': 'Marie',
                 'lastname': 'Rousseau',
                 'email': 'marie.rousseau@artsell.com',
@@ -47,7 +46,7 @@ def create_artists():
             },
             {
                 'id': 3,
-                'username': 'alessandro_torres',
+                'username': 'artist_test_3',
                 'firstname': 'Alessandro',
                 'lastname': 'Torres',
                 'email': 'alessandro.torres@artsell.com',
@@ -62,8 +61,7 @@ def create_artists():
         ]
         
         try:
-            # Default password for all artists (should be changed on first login)
-            default_password = 'ArtistPass123!'
+            default_password = 'Artist123'
             password_hash = generate_password_hash(default_password)
             
             for artist in artists_data:
@@ -102,5 +100,5 @@ def create_artists():
     return True
 
 if __name__ == '__main__':
-    print("Creating Artist Users")
+    print("Creating Artist Users...")
     create_artists()

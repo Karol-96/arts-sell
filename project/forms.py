@@ -79,18 +79,7 @@ class CheckoutForm(FlaskForm):
 class ArtworkUploadForm(FlaskForm):
     title = StringField('Artwork Title', validators=[InputRequired(), Length(min=1, max=255)])
     description = TextAreaField('Description', validators=[Optional(), Length(max=1000)])
-    medium = SelectField('Medium', validators=[Optional()], choices=[
-        ('', 'Select Medium'),
-        ('Oil on Canvas', 'Oil on Canvas'),
-        ('Acrylic on Canvas', 'Acrylic on Canvas'),
-        ('Watercolor', 'Watercolor'),
-        ('Mixed Media', 'Mixed Media'),
-        ('Digital Art', 'Digital Art'),
-        ('Photography', 'Photography'),
-        ('Sculpture', 'Sculpture'),
-        ('Print', 'Print'),
-        ('Other', 'Other')
-    ])
+    medium = SelectField('Medium', validators=[Optional()], choices=[])
     height = DecimalField('Height (cm)', validators=[InputRequired(), NumberRange(min=1, max=999.99)], 
                          places=2, render_kw={'step': '0.01'})
     width = DecimalField('Width (cm)', validators=[InputRequired(), NumberRange(min=1, max=999.99)], 
@@ -108,18 +97,7 @@ class ArtworkUploadForm(FlaskForm):
 class ArtworkEditForm(FlaskForm):
     title = StringField('Artwork Title', validators=[InputRequired(), Length(min=1, max=255)])
     description = TextAreaField('Description', validators=[Optional(), Length(max=1000)])
-    medium = SelectField('Medium', validators=[Optional()], choices=[
-        ('', 'Select Medium'),
-        ('Oil on Canvas', 'Oil on Canvas'),
-        ('Acrylic on Canvas', 'Acrylic on Canvas'),
-        ('Watercolor', 'Watercolor'),
-        ('Mixed Media', 'Mixed Media'),
-        ('Digital Art', 'Digital Art'),
-        ('Photography', 'Photography'),
-        ('Sculpture', 'Sculpture'),
-        ('Print', 'Print'),
-        ('Other', 'Other')
-    ])
+    medium = SelectField('Medium', validators=[Optional()], choices=[])
     height = DecimalField('Height (cm)', validators=[InputRequired(), NumberRange(min=1, max=999.99)], 
                          places=2, render_kw={'step': '0.01'})
     width = DecimalField('Width (cm)', validators=[InputRequired(), NumberRange(min=1, max=999.99)], 
@@ -138,7 +116,7 @@ class ArtworkEditForm(FlaskForm):
 class UserManagementForm(FlaskForm):
     firstname = StringField('First Name', validators=[InputRequired(), Length(max=50)])
     lastname = StringField('Last Name', validators=[InputRequired(), Length(max=50)])
-    email = StringField('', validators=[InputRequired(), Email(), Length(max=120)])
+    email = StringField('Email', validators=[InputRequired(), Email(), Length(max=120)])
     role = SelectField('Role', validators=[InputRequired()], choices=[
         ('customer', 'Customer'),
         ('artist', 'Artist'),
@@ -146,16 +124,15 @@ class UserManagementForm(FlaskForm):
     ])
     submit = SubmitField('Update User')
 
-class OrderStatusForm(FlaskForm):
-    status = SelectField('Order Status', validators=[InputRequired()], choices=[
-        ('pending', 'Pending'),
-        ('confirmed', 'Confirmed'),
-        ('processing', 'Processing'),
-        ('shipped', 'Shipped'),
-        ('in_transit', 'In Transit'),
-        ('delivered', 'Delivered'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-        ('refunded', 'Refunded')
+class CreateUserForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired(), Length(min=3, max=50)])
+    firstname = StringField('First Name', validators=[InputRequired(), Length(max=50)])
+    lastname = StringField('Last Name', validators=[InputRequired(), Length(max=50)])
+    email = StringField('Email', validators=[InputRequired(), Email(), Length(max=120)])
+    password = StringField('Password', validators=[InputRequired(), Length(min=6)])
+    role = SelectField('Role', validators=[InputRequired()], choices=[
+        ('customer', 'Customer'),
+        ('artist', 'Artist'),
+        ('admin', 'Admin')
     ])
-    submit = SubmitField('Update Status')
+    submit = SubmitField('Create User')

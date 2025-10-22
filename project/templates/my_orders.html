@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 
-{% block title %}My Orders{% endblock %}
+{% block title %}Orders{% endblock %}
 
 {% block main %}
 <div class="dashboard-container">
     <div class="dashboard-header">
-        <h1>My Orders</h1>
+        <h1>Your Orders</h1>
         <p>Track and manage your order history</p>
     </div>
 
@@ -43,7 +43,7 @@
                     </td>
                     <td>{{ order.payment_method|replace('_', ' ')|title }}</td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-outline-secondary">View Details</a>
+                        View Only
                     </td>
                 </tr>
                 {% endfor %}

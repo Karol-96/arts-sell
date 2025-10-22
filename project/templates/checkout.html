@@ -34,30 +34,29 @@
 
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" value="{{ current_user.phone if current_user.phone else 'Not provided' }}" readonly>
+                            <input type="text" class="form-control" name="phone" value="{{ current_user.phone if current_user.phone else '' }}" placeholder="Enter phone number" pattern="^\+?1?\d{9,15}$" required>
+                            <small class="text-muted">Phone number for shipping. Update if necessary.</small>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Shipping Address</label>
-                            <textarea class="form-control" rows="2" readonly>{{ current_user.address if current_user.address else 'Please update your profile with shipping address' }}</textarea>
+                            <textarea class="form-control" name="shipping_address" rows="2" placeholder="Enter your shipping address" required>{{ current_user.address if current_user.address else '' }}</textarea>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">City</label>
-                                <input type="text" class="form-control" value="{{ current_user.city if current_user.city else 'N/A' }}" readonly>
+                                <input type="text" class="form-control" name="shipping_city" value="{{ current_user.city if current_user.city else '' }}" placeholder="City" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label">State</label>
-                                <input type="text" class="form-control" value="{{ current_user.state if current_user.state else 'N/A' }}" readonly>
+                                <input type="text" class="form-control" name="shipping_state" value="{{ current_user.state if current_user.state else '' }}" placeholder="State" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label">ZIP</label>
-                                <input type="text" class="form-control" value="{{ current_user.zip if current_user.zip else 'N/A' }}" readonly>
+                                <input type="text" class="form-control" name="shipping_zip" value="{{ current_user.zip if current_user.zip else '' }}" placeholder="ZIP" required>
                             </div>
                         </div>
-
-                        <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary btn-sm">Edit Shipping Info</a>
                     </div>
                 </div>
 
@@ -93,13 +92,6 @@
                         <div class="mb-3">
                             <label class="form-label">Cardholder Name</label>
                             <input type="text" class="form-control" name="card_name" placeholder="Name on card" required>
-                        </div>
-
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="save_card" name="save_card">
-                            <label class="form-check-label" for="save_card">
-                                Save card for future purchases
-                            </label>
                         </div>
                     </div>
                 </div>
@@ -147,11 +139,7 @@
 
                     <div class="text-center">
                         <small class="text-muted">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-lock" viewBox="0 0 16 16">
-                                <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
-                                <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415"/>
-                            </svg>
-                            Secure SSL Encrypted Payment
+                            <i class="fa fa-shield me-2"> Secure SSL Encrypted Payment</i>
                         </small>
                     </div>
                 </div>

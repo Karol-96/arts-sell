@@ -6,7 +6,7 @@
 <div class="dashboard-container">
     <div class="dashboard-header">
         <h1>Your Cart</h1>
-        <p>Review your selected artworks for monthly lease before proceeding to checkout.</p>
+        <p>Review your selected artworks before proceeding to checkout.</p>
     </div>
 
     {% if items %}
@@ -53,12 +53,12 @@
                 <h5 class="mb-4">Order Summary</h5>
                 
                 <div class="d-flex justify-content-between mb-3">
-                    <span>Monthly Subtotal</span>
+                    <span>Subtotal</span>
                     <span>${{ "%.2f"|format(subtotal) }}</span>
                 </div>
                 
                 <div class="d-flex justify-content-between mb-3">
-                    <span>Delivery & Setup</span>
+                    <span>Shipping</span>
                     <span>${{ "%.2f"|format(shipping) }}</span>
                 </div>
                 
@@ -112,7 +112,7 @@
         <div class="col-lg-6 text-center">
             <div class="empty-basket">
                 <h3 class="text-muted mb-3">Your cart is empty</h3>
-                <p class="text-muted mb-4">Start browsing to add beautiful artworks for monthly lease</p>
+                <p class="text-muted mb-4">Start browsing to add beautiful artworks</p>
                 <a href="{{ url_for('main.artworks') }}" class="btn btn-action">Browse Artworks</a>
             </div>
         </div>

@@ -676,10 +676,6 @@ main {
     letter-spacing: 0.5px;
 }
 
-/* ============================================
-   ARTWORK GALLERY STYLES - CONSOLIDATED
-   ============================================ */
-
 /* Artwork card title in gallery */
 .artwork-card .artwork-title,
 .artwork-card .card-title {
@@ -772,9 +768,7 @@ main {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-    /* Removed responsive artwork-grid - using Bootstrap responsive grid */
-    
+@media (max-width: 768px) {    
     .search-filter-section {
         padding: 20px;
     }
@@ -920,10 +914,6 @@ main {
     box-shadow: 0 15px 35px rgba(0,0,0,0.1);
     border: 1px solid #f0f0f0;
 }
-
-/* ============================================
-   ARTWORK DETAIL PAGE STYLES
-   ============================================ */
 
 /* Artwork detail page main title */
 .artwork-detail-container .artwork-title {
@@ -2041,7 +2031,7 @@ footer p {
     color: #34495e;
 }
 
-.cart-count {
+.cart-count, .favorites-count {
     position: absolute;
     top: -8px;
     right: -8px;
@@ -2827,4 +2817,63 @@ footer p {
     .payment-methods {
         grid-template-columns: 1fr;
     }
+}
+
+/* Custom button styling for artwork cards - consolidated from artworks.html and favorites.html */
+.btn-favorite, .btn-cart {
+    background: none;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: #6c757d;
+}
+
+.btn-favorite i, .btn-cart i {
+    font-size: 22px;
+}
+
+.btn-favorite:hover, .btn-cart:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.1);
+    color: #495057;
+}
+
+.btn-favorite.favorited {
+    color: #dc3545 !important;
+}
+
+.btn-favorite.favorited:hover {
+    color: #c82333 !important;
+    background-color: #f8f9fa;
+}
+
+.btn-cart:hover {
+    color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.btn-favorite.disabled, .btn-cart.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-favorite.disabled:hover, .btn-cart.disabled:hover {
+    transform: none;
+    background: none;
+}
+
+a.btn-favorite, a.btn-cart {
+    text-decoration: none;
+}
+
+a.btn-favorite:hover, a.btn-cart:hover {
+    text-decoration: none;
 }

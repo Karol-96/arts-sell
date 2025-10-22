@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional, List
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -36,7 +36,7 @@ class User:
 
 @dataclass
 class Artist:
-    user_id: int  # References users.id
+    user_id: int
     firstname: str
     lastname: str
     email: str
@@ -45,27 +45,11 @@ class Artist:
     bio: str = None
     created_at: Optional[datetime] = None
     
-    @property
     def full_name(self):
         return f"{self.firstname} {self.lastname}"
     
-    @property
     def artist_id(self):
         return self.user_id
-    
-    @classmethod
-    def from_user_data(cls, user_data):
-        """Create Artist instance from user database row"""
-        return cls(
-            user_id=user_data.get('id'),
-            firstname=user_data.get('firstname', ''),
-            lastname=user_data.get('lastname', ''),
-            email=user_data.get('email', ''),
-            username=user_data.get('username', ''),
-            phone=user_data.get('phone'),
-            bio=user_data.get('bio'),
-            created_at=user_data.get('created_at')
-        )
     
 @dataclass
 class Artwork:
@@ -74,8 +58,8 @@ class Artwork:
     artist_name: str
     price: float
     status: str  # 'available', 'unavailable'
-    height: float = field(default=0.0)
-    width: float = field(default=0.0)
+    height: float = 0.0
+    width: float = 0.0
     currency: str = "$"
     size_category: Optional[str] = None
     category: Optional[str] = None
@@ -87,22 +71,12 @@ class Artwork:
     created_at: Optional[datetime] = None
     artist_id: Optional[int] = None
     
-    @property
     def dimensions(self):
         return f"{self.height} x {self.width} cm"
     
-    @property
     def is_available(self):
         return self.status == 'available'
-
-@dataclass
-class Cart:
-    id: int
-    user_id: int
-    artwork_id: int
-    quantity: int = 1
-    added_at: Optional[datetime] = None
-
+    
 @dataclass
 class Order:
     id: int
@@ -110,18 +84,10 @@ class Order:
     total_amount: float
     shipping_cost: float = 45.00
     tax: float = 0.0
-    status: str = 'pending'  # 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled'
+    status: str = 'pending'  # 'pending', 'success', 'cancelled', 'shipped', 'delivered'
     shipping_address: str = None
     payment_method: str = None
     created_at: Optional[datetime] = None
-
-@dataclass
-class OrderItem:
-    id: int
-    order_id: int
-    artwork_id: int
-    price: float
-    quantity: int = 1
 
 @dataclass
 class PaymentInfo:

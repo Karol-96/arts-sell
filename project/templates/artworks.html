@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <!-- Advanced Search and Filter Section -->
+    <!-- Search & Filter -->
     <div class="search-filter-section">
         <div class="container">
             <div class="filter-panel">
@@ -38,19 +38,29 @@
                             <select class="form-select" name="medium">
                                 <option value="">All Mediums</option>
                                 {% for medium in mediums %}
-                                <option value="{{ medium }}" {% if medium_filter == medium %}selected{% endif %}>{{ medium }}</option>
+                                <option value="{{ medium }}" {% if medium_filter == medium %}selected{% endif %}>{{ medium | title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         
                         <div class="col-lg-3 col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Min Price ($/month)</label>
-                            <input type="number" class="form-control" name="price_min" value="{{ price_min }}" placeholder="0" min="0">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select class="form-select" name="category">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                <option value="{{ category }}" {% if category_filter == category %}selected{% endif %}>{{ category | title }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         
                         <div class="col-lg-3 col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Max Price ($/month)</label>
-                            <input type="number" class="form-control" name="price_max" value="{{ price_max }}" placeholder="1000" min="0">
+                            <label class="form-label fw-semibold">Size</label>
+                            <select class="form-select" name="size">
+                                <option value="">All Sizes</option>
+                                {% for size in sizes %}
+                                <option value="{{ size }}" {% if size_filter == size %}selected{% endif %}>{{ size | title }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         
                         <div class="col-lg-3 col-md-6 mb-3 d-flex gap-2">
@@ -63,7 +73,7 @@
         </div>
     </div>
 
-    <!-- Artwork Grid -->
+    <!-- Gallery -->
     <div class="container">
         <div class="row sorting-results-row mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -72,10 +82,10 @@
                     <form method="GET" class="sort-form">
                         <input type="hidden" name="query" value="{{ query }}">
                         <input type="hidden" name="medium" value="{{ medium_filter }}">
-                        <input type="hidden" name="price_min" value="{{ price_min }}">
-                        <input type="hidden" name="price_max" value="{{ price_max }}">
+                        <input type="hidden" name="category" value="{{ category_filter }}">
+                        <input type="hidden" name="size" value="{{ size_filter }}">
                         <select class="form-select sort-select" name="sort" onchange="this.form.submit()">
-                            <option value="featured" {% if sort_by == 'featured' %}selected{% endif %}>Sort by: Featured</option>
+                            <option value="featured" {% if sort_by == 'featured' %}selected{% endif %}>Featured</option>
                             <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
                             <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Oldest First</option>
                             <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
@@ -111,9 +121,9 @@
                             </a>
                             <div class="artwork-badge">
                                 {% if artwork.status == 'available' %}
-                                    <span class="badge bg-success">Available</span>
+                                    <span class="badge bg-success bg-gradient">Available</span>
                                 {% else %}
-                                    <span class="badge bg-danger">Rented</span>
+                                    <span class="badge bg-secondary bg-gradient">Unavailable</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -127,21 +137,42 @@
                         <div class="card-footer d-flex justify-content-between align-items-center p-3 mt-3">
                             <div class="pricing">
                                 <p class="mb-0 fw-bold text-primary">{{ artwork.currency }}{{ "%.2f"|format(artwork.price) }}</p>
-                                <small class="text-muted">/ Month</small>
                             </div>
-                            <div class="action d-flex gap-1 align-items-center">
+                            <!-- Add to Favorite & Cart -->
+                            <div class="action d-flex gap-2 align-items-center">
                                 {% if current_user.is_authenticated %}
-                                    <button type="button" class="btn btn-outline-secondary px-3" title="add to favorite"><i class="fa fa-bookmark-o"></i></button>
-                                    {% if artwork.status == 'available' %}
-                                        <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" style="display: inline;">
-                                            <button type="submit" class="btn btn-outline-secondary px-3" title="add to cart"><i class="fa fa-shopping-cart"></i></button>
+                                    {% if is_favorite(current_user.id, artwork.id) %}
+                                        <form method="POST" action="{{ url_for('main.remove_favorite', artwork_id=artwork.id) }}" style="display: inline;">
+                                            <button type="submit" class="btn-favorite favorited" title="Remove from favorites">
+                                                <i class="fa fa-heart"></i>
+                                            </button>
                                         </form>
                                     {% else %}
-                                        <button type="button" class="btn btn-outline-secondary px-3" title="not available" disabled><i class="fa fa-shopping-cart"></i></button>
+                                        <form method="POST" action="{{ url_for('main.add_favorite', artwork_id=artwork.id) }}" style="display: inline;">
+                                            <button type="submit" class="btn-favorite" title="Add to favorites">
+                                                <i class="fa fa-heart-o"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if artwork.status == 'available' %}
+                                        <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" style="display: inline;">
+                                            <button type="submit" class="btn-cart" title="Add to cart">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <button type="button" class="btn-cart disabled" title="Not available" disabled>
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </button>
                                     {% endif %}
                                 {% else %}
-                                    <a href="{{ url_for('main.login') }}" class="btn btn-outline-secondary px-3" title="login to add to favorites"><i class="fa fa-bookmark-o"></i></a>
-                                    <a href="{{ url_for('main.login') }}" class="btn btn-outline-secondary px-3" title="login to add to cart"><i class="fa fa-shopping-cart"></i></a>
+                                    <a href="{{ url_for('main.login') }}" class="btn-favorite" title="Login to add to favorites">
+                                        <i class="fa fa-heart-o"></i>
+                                    </a>
+                                    <a href="{{ url_for('main.login') }}" class="btn-cart" title="Login to add to cart">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
@@ -154,17 +185,17 @@
         <div class="row">
             <div class="col-12">
                 <div class="no-results text-center py-5">
-                    <i class="no-results-icon display-1">🎨</i>
+                    <i class="fa fa-image"></i>
                     <h4 class="mt-3">No artworks found</h4>
                     <p class="text-muted">
-                        {% if query or medium_filter or price_min or price_max %}
+                        {% if query or medium_filter or category_filter or size_filter %}
                             Try adjusting your search criteria or filters.
                         {% else %}
                             No artworks are currently available for lease.
                         {% endif %}
                     </p>
-                    {% if query or medium_filter or price_min or price_max %}
-                    <a href="{{ url_for('main.artworks') }}" class="btn btn-primary">Clear Filters</a>
+                    {% if query or medium_filter or category_filter or size_filter %}
+                    <a href="{{ url_for('main.artworks') }}" class="btn btn-primary">Clear</a>
                     {% endif %}
                 </div>
             </div>
@@ -173,4 +204,3 @@
     </div>
 </div>
 {% endblock %}
-

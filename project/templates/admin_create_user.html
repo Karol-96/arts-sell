@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Create New User{% endblock %}
 
 {% block main %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Edit User: {{ user.username }}</h2>
+                <h2>Create New User</h2>
                 <a href="{{ url_for('main.admin_users') }}" class="btn btn-secondary">
                     <i class="fa fa-arrow-left"></i> Back to Users
                 </a>
@@ -20,6 +20,18 @@
                 <div class="card-body">
                     <form method="POST">
                         {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.username.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
                         
                         <div class="row">
                             <div class="col-md-6">
@@ -63,6 +75,19 @@
                         </div>
                         
                         <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control", placeholder="Enter a readable password (will be hashed)") }}
+                            {% if form.password.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.password.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">Password will be automatically hashed for security.</small>
+                        </div>
+                        
+                        <div class="mb-3">
                             {{ form.role.label(class="form-label") }}
                             {{ form.role(class="form-select") }}
                             {% if form.role.errors %}
@@ -75,7 +100,7 @@
                         </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{{ url_for('main.admin_users') }}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                            <a href="{{ url_for('main.admin_users') }}" class="btn btn-secondary me-md-2">Cancel</a>
                             {{ form.submit(class="btn btn-primary") }}
                         </div>
                     </form>

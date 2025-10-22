@@ -4,7 +4,7 @@
 
 {% block main %}
 <div class="artwork-detail-container">
-    <!-- Breadcrumb Navigation -->
+    <!-- Navigation -->
     <div class="breadcrumb-section">
         <div class="container">
             <nav aria-label="breadcrumb">
@@ -19,32 +19,45 @@
 
     <div class="container">
         <div class="row g-4">
-            <!-- Artwork Image Section -->
+            <!-- Big Image -->
             <div class="col-lg-7">
                 <div class="artwork-image-section">
                     <div class="main-image-container">
                         <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
                              class="main-artwork-image" alt="{{ artwork.title }}" id="mainImage">
                     </div>
-                    
-                    <!-- Image Thumbnails (if multiple images) -->
-                    <div class="thumbnail-gallery">
-                        <div class="thumbnail-item active">
-                            <img src="{{ url_for('static', filename=artwork.image_url if artwork.image_url else 'img/feature-slide-1.png') }}" 
-                                 alt="{{ artwork.title }}">
-                        </div>
-                        <!-- Additional thumbnails can be added here -->
-                    </div>
                 </div>
             </div>
             
-            <!-- Artwork Information Section -->
+            <!-- Information Section -->
             <div class="col-lg-5">
                 <div class="artwork-info-section">
-                    <!-- Header -->
                     <div class="artwork-header">
-                        <h2 class="artwork-title">{{ artwork.title }}</h2>
-                        <p class="artist-name mb-1">by <a href="#" class="artist-link">{{ artwork.artist_name }}</a></p>
+                        <div class="title-with-favorite d-flex justify-content-between align-items-start">
+                            <div class="title-content">
+                                <h2 class="artwork-title">{{ artwork.title }}</h2>
+                                <p class="artist-name mb-1">by <a href="#" class="artist-link">{{ artwork.artist_name }}</a></p>
+                            </div>
+                            {% if current_user.is_authenticated %}
+                                {% if is_favorite(current_user.id, artwork.id) %}
+                                    <form method="POST" action="{{ url_for('main.remove_favorite', artwork_id=artwork.id) }}" style="display: inline;">
+                                        <button type="submit" class="btn-favorite favorited" title="Remove from favorites">
+                                            <i class="fa fa-heart"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{{ url_for('main.add_favorite', artwork_id=artwork.id) }}" style="display: inline;">
+                                        <button type="submit" class="btn-favorite" title="Add to favorites">
+                                            <i class="fa fa-heart-o"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ url_for('main.login') }}" class="btn-favorite" title="Login to add to favorites">
+                                    <i class="fa fa-heart-o"></i>
+                                </a>
+                            {% endif %}
+                        </div>
                         <div class="artwork-rating mt-0">
                             <div class="stars">
                                 <span class="star">★</span>
@@ -58,15 +71,13 @@
                         <div class="availability-section">
                             <div class="status-badge">
                             {% if artwork.status == 'available' %}
-                                <div class="badge bg-success">Available</div>
+                                <div class="badge bg-success bg-gradient">Available</div>
                             {% else %}
-                                <div class="badge bg-danger">Not Available</div>
+                                <div class="badge bg-secondary bg-gradient">Not Available</div>
                             {% endif %}
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Pricing -->
                     <div class="pricing-section">
                         <div class="price-display">
                             <span class="main-price">${{ "%.2f"|format(artwork.price) }}</span>
@@ -76,24 +87,23 @@
                             <small class="text-muted">Monthly lease • Free delivery & setup</small>
                         </div>
                     </div>
-
-                    <!-- Action Buttons -->
+                    <!-- Action Buttons: Add to Cart -->
                     <div class="action-buttons">
                         {% if current_user.is_authenticated %}
-                            <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" class="add-to-cart-form">
-                                <button type="submit" class="btn btn-add-to-cart w-100">
-                                    <i class="cart-icon">🛒</i> Add to Cart
+                            {% if artwork.status == 'available' %}
+                                <form method="POST" action="{{ url_for('main.add_cart', artwork_id=artwork.id) }}" class="add-to-cart-form">
+                                    <button type="submit" class="btn btn-add-to-cart w-100">
+                                        <i class="fa fa-shopping-cart"></i> Add to Cart
+                                    </button>
+                                </form>
+                            {% else %}
+                                <button class="btn btn-add-to-cart w-100" disabled>
+                                    <i class="fa fa-shopping-cart"></i> Add to Cart
                                 </button>
-                            </form>
-                            <button class="btn btn-wishlist" disabled>
-                                <i class="heart-icon">♡</i> Add to Wishlist (Disabled)
-                            </button>
+                            {% endif %}
                         {% else %}
-                            <a href="{{ url_for('main.login') }}" class="btn btn-add-to-cart">
-                                <i class="cart-icon">🛒</i> Login to Add to Cart
-                            </a>
-                            <a href="{{ url_for('main.login') }}" class="btn btn-wishlist">
-                                <i class="heart-icon">♡</i> Login to Add to Wishlist
+                            <a href="{{ url_for('main.login') }}" class="btn btn-add-to-cart w-100">
+                                <i class="fa fa-shopping-cart"></i> Login to Add to Cart
                             </a>
                         {% endif %}
                     </div>
@@ -101,15 +111,15 @@
                     <!-- Quick Info -->
                     <div class="quick-info">
                         <div class="info-item">
-                            <i class="info-icon">🚚</i>
+                            <i class="fa fa-truck"></i>
                             <span>Free delivery & setup</span>
                         </div>
                         <div class="info-item">
-                            <i class="info-icon">🔄</i>
+                            <i class="fa fa-refresh"></i>
                             <span>Easy monthly exchange</span>
                         </div>
                         <div class="info-item">
-                            <i class="info-icon">🛡️</i>
+                            <i class="fa fa-shield"></i>
                             <span>Fully insured</span>
                         </div>
                     </div>
@@ -156,15 +166,15 @@
                             </div>
                         </div>
                         
-                        <!-- Specifications Tab -->
+                        <!-- Specifications Tab: PlaceHolder -->
                         <div class="tab-pane fade" id="specifications" role="tabpanel">
                         </div>
                         
-                        <!-- Reviews Tab -->
+                        <!-- Reviews Tab: PlaceHolder -->
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                         </div>
                         
-                        <!-- Shipping Tab -->
+                        <!-- Shipping Tab: PlaceHolder -->
                         <div class="tab-pane fade" id="shipping" role="tabpanel">
                         </div>
                     </div>
