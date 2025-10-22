@@ -67,6 +67,12 @@ A modern web application for leasing artwork through monthly subscriptions, buil
      app.config['MYSQL_PASSWORD'] = 'your_password'
      app.config['MYSQL_DB'] = 'artspace'
      ```
+   - Create sample artists in create_artists.py
+      ```bash
+      python create_artists.py
+      ```
+   - Copy & Paste the database.sql into your MySQL to generate the data model
+   - Copy & Paste the add_data.sql into your MySQL to load artworks into the artworks table
 
 5. **Run the application**
    ```bash
